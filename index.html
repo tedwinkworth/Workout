@@ -67,6 +67,19 @@
     .dot.completed {
       background: #22c55e;
     }
+    @keyframes slideDown {
+      from {
+        transform: translate(-50%, -100%);
+        opacity: 0;
+      }
+      to {
+        transform: translate(-50%, 0);
+        opacity: 1;
+      }
+    }
+    .pr-notification {
+      animation: slideDown 0.3s ease-out;
+    }
   </style>
 </head>
 <body class="bg-zinc-950">
@@ -247,7 +260,7 @@ const WORKOUT_DATA = {"workouts":[{"phase":1,"week":1,"day":1,"title":"Day 1 Low
 </script>
   <script>
     // Google Sheets Integration - REPLACE WITH YOUR DEPLOYED WEB APP URL
-    const APPS_SCRIPT_URL = https://script.google.com/macros/s/AKfycbwM-OXlNYVhL0-hEHcN-C50Lf3fePN_HgBsCYcZRSeBSEPzm1bWGL9XjzuoWtsasjp8EA/exec; // e.g., 'https://script.google.com/macros/s/XXXXX/exec'
+    const APPS_SCRIPT_URL = https://script.google.com/macros/s/AKfycbyApO5TRokbe4YgdE-vnnAfO1SpDjrkmFf96bk_09PJjbeG30x211JrPQwaFQpCn4y-Qg/exec; // e.g., 'https://script.google.com/macros/s/XXXXX/exec'
     
     // PR Data Cache
     let prData = {};
@@ -389,7 +402,7 @@ const WORKOUT_DATA = {"workouts":[{"phase":1,"week":1,"day":1,"title":"Day 1 Low
     }
     
     // Save exercise data to Google Sheets
-    function saveExerciseData(exerciseName, sets, reps, weightInputId, notesInputId) {
+    async function saveExerciseData(exerciseName, sets, reps, weightInputId, notesInputId) {
       const weightInput = document.getElementById(weightInputId);
       const notesInput = document.getElementById(notesInputId);
       
@@ -398,17 +411,57 @@ const WORKOUT_DATA = {"workouts":[{"phase":1,"week":1,"day":1,"title":"Day 1 Low
       
       // Only log if we have a weight value
       if (weight && weight !== '') {
-        logWorkoutToSheet(
+        const weightValue = parseFloat(weight);
+        
+        // Log to Google Sheets
+        await logWorkoutToSheet(
           currentPhase,
           currentWeek,
           currentDay,
           exerciseName,
           sets,
           reps,
-          parseFloat(weight),
+          weightValue,
           notes
         );
+        
+        // Check if this is a new PR
+        const currentPR = getPR(exerciseName);
+        if (!currentPR || weightValue > currentPR) {
+          // New PR! Refresh PRs from backend to update display
+          console.log(`🎉 New PR for ${exerciseName}: ${weightValue} lbs!`);
+          await loadPRsFromSheet();
+          
+          // Show celebration message
+          showPRNotification(exerciseName, weightValue);
+        }
       }
+    }
+    
+    // Show PR notification
+    function showPRNotification(exerciseName, weight) {
+      // Create notification element
+      const notification = document.createElement('div');
+      notification.className = 'pr-notification fixed top-20 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-green-500 to-emerald-500 text-white px-6 py-4 rounded-xl shadow-2xl z-50 font-bold';
+      notification.innerHTML = `
+        <div class="flex items-center gap-3">
+          <span class="text-2xl">🎉</span>
+          <div>
+            <div class="text-sm opacity-90">NEW PERSONAL RECORD!</div>
+            <div class="text-lg">${exerciseName}: ${weight} lbs</div>
+          </div>
+        </div>
+      `;
+      
+      document.body.appendChild(notification);
+      
+      // Remove after 3 seconds
+      setTimeout(() => {
+        notification.style.opacity = '0';
+        notification.style.transform = 'translate(-50%, -100%)';
+        notification.style.transition = 'all 0.3s ease-out';
+        setTimeout(() => notification.remove(), 300);
+      }, 3000);
     }
     
     // Generate completion circles HTML
