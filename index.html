@@ -1,393 +1,688 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Workout UI Prototype - Phase 1 Day 1</title>
+  <title>Swipeable Workout Cards - Phase 1 Day 1</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    * { -webkit-tap-highlight-color: transparent; }
-    body { margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+    * { 
+      -webkit-tap-highlight-color: transparent;
+      touch-action: pan-y;
+    }
+    body { 
+      margin: 0; 
+      padding: 0; 
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      overflow-x: hidden;
+    }
+    .card-container {
+      position: relative;
+      width: 100%;
+      height: calc(100vh - 200px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .workout-card {
+      position: absolute;
+      width: calc(100% - 48px);
+      max-width: 500px;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+      cursor: grab;
+    }
+    .workout-card:active {
+      cursor: grabbing;
+    }
+    .workout-card.active {
+      z-index: 10;
+      transform: scale(1);
+      opacity: 1;
+    }
+    .workout-card.prev {
+      z-index: 5;
+      transform: scale(0.95) translateX(-20px);
+      opacity: 0.5;
+      pointer-events: none;
+    }
+    .workout-card.next {
+      z-index: 5;
+      transform: scale(0.95) translateX(20px);
+      opacity: 0.5;
+      pointer-events: none;
+    }
+    .workout-card.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
   </style>
 </head>
 <body class="bg-zinc-950">
-  
+
   <!-- Header -->
-  <div class="sticky top-0 bg-zinc-950/95 backdrop-blur-sm border-b border-zinc-800 z-10">
+
+  <div class="sticky top-0 bg-zinc-950/95 backdrop-blur-sm border-b border-zinc-800 z-50">
     <div class="px-6 py-4">
-      <div class="flex items-center justify-between mb-2">
-        <button class="text-zinc-400 text-sm">← Back</button>
+      <div class="flex items-center justify-between mb-3">
+        <button onclick="goBack()" class="text-zinc-400 text-sm">← Back</button>
         <div class="text-right">
           <p class="text-xs text-zinc-500">Week 1</p>
           <p class="text-sm font-bold text-white">Day 1 - Lower Body</p>
         </div>
       </div>
-      <div class="h-1 bg-zinc-800 rounded-full overflow-hidden">
-        <div class="h-full bg-gradient-to-r from-orange-500 to-red-500 w-0"></div>
-      </div>
+
+```
+  <!-- Progress Bar -->
+  <div class="flex items-center gap-2 mb-2">
+    <div class="flex-1 h-1.5 bg-zinc-800 rounded-full overflow-hidden">
+      <div id="progressBar" class="h-full bg-gradient-to-r from-orange-500 to-red-500 transition-all duration-300" style="width: 0%"></div>
     </div>
+    <span id="progressText" class="text-xs text-zinc-500 font-bold">0/7</span>
+  </div>
+</div>
+```
+
   </div>
 
-  <div class="px-6 py-6 space-y-4 pb-20">
+  <!-- Card Navigation Dots -->
+
+  <div class="flex justify-center gap-2 py-4">
+    <div class="dot active" data-index="0"></div>
+    <div class="dot" data-index="1"></div>
+    <div class="dot" data-index="2"></div>
+    <div class="dot" data-index="3"></div>
+    <div class="dot" data-index="4"></div>
+    <div class="dot" data-index="5"></div>
+    <div class="dot" data-index="6"></div>
+  </div>
+
+  <!-- Swipeable Cards Container -->
+
+  <div class="card-container">
+
+```
+<!-- CARD 1: WARMUP -->
+<div class="workout-card active" data-card="0">
+  <div class="bg-zinc-900/50 border border-zinc-800 rounded-2xl p-6 relative">
+    <!-- Completion Checkmark -->
+    <button onclick="markComplete(0)" class="absolute top-4 right-4 w-10 h-10 rounded-full border-2 border-zinc-700 flex items-center justify-center text-zinc-700 hover:border-green-500 hover:text-green-500 transition-all" id="check-0">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <polyline points="20 6 9 17 4 12" stroke-width="3"/>
+      </svg>
+    </button>
     
-    <!-- CARD 1: WARMUP -->
-    <div class="bg-zinc-900/50 border border-zinc-800 rounded-2xl p-6">
-      <div class="flex items-center gap-2 mb-4">
-        <div class="w-2 h-2 bg-blue-400 rounded-full"></div>
-        <h2 class="text-lg font-black text-white uppercase tracking-wide">Warmup</h2>
-      </div>
-      
-      <div class="space-y-3">
-        <div class="flex justify-between items-center py-2 border-b border-zinc-800/50">
+    <div class="flex items-center gap-2 mb-4">
+      <div class="w-2 h-2 bg-blue-400 rounded-full"></div>
+      <h2 class="text-lg font-black text-white uppercase tracking-wide">Warmup</h2>
+    </div>
+    
+    <div class="space-y-3">
+      <div class="bg-zinc-950/50 rounded-lg p-3">
+        <div class="flex justify-between items-center mb-1">
           <span class="text-white font-semibold">Sled drag/push</span>
           <span class="text-zinc-400 text-sm">1 × 5 min</span>
         </div>
-        <div class="flex justify-between items-center py-2 border-b border-zinc-800/50">
+        <a href="https://youtu.be/YO9TDb8RKsE" target="_blank" class="text-blue-400 text-xs flex items-center gap-1 hover:text-blue-300">
+          <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M10 16.5l6-4.5-6-4.5v9zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/></svg>
+          Form video
+        </a>
+      </div>
+      
+      <div class="bg-zinc-950/50 rounded-lg p-3">
+        <div class="flex justify-between items-center mb-1">
           <span class="text-white font-semibold">Hip Airplane</span>
           <span class="text-zinc-400 text-sm">2 × 5 e.s.</span>
         </div>
-        <div class="flex justify-between items-center py-2 border-b border-zinc-800/50">
+        <a href="https://youtu.be/2hIL15iGuNA" target="_blank" class="text-blue-400 text-xs flex items-center gap-1 hover:text-blue-300">
+          <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M10 16.5l6-4.5-6-4.5v9zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/></svg>
+          Form video
+        </a>
+      </div>
+      
+      <div class="bg-zinc-950/50 rounded-lg p-3">
+        <div class="flex justify-between items-center mb-1">
           <span class="text-white font-semibold">Hanging Leg Raise</span>
           <span class="text-zinc-400 text-sm">2 × 10</span>
         </div>
-        <div class="flex justify-between items-center py-2">
+        <a href="https://youtu.be/7FwGZ8qY5OU" target="_blank" class="text-blue-400 text-xs flex items-center gap-1 hover:text-blue-300">
+          <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M10 16.5l6-4.5-6-4.5v9zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/></svg>
+          Form video
+        </a>
+      </div>
+      
+      <div class="bg-zinc-950/50 rounded-lg p-3">
+        <div class="flex justify-between items-center mb-1">
           <span class="text-white font-semibold">Suitcase Carry</span>
           <span class="text-zinc-400 text-sm">2 × 10 yds e.s.</span>
         </div>
+        <a href="https://youtu.be/bAnCoDrvXc4" target="_blank" class="text-blue-400 text-xs flex items-center gap-1 hover:text-blue-300">
+          <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M10 16.5l6-4.5-6-4.5v9zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/></svg>
+          Form video
+        </a>
       </div>
     </div>
+  </div>
+</div>
 
-    <!-- CARD 2: PLYOS -->
-    <div class="bg-zinc-900/50 border border-zinc-800 rounded-2xl p-6">
-      <div class="flex items-center gap-2 mb-4">
-        <div class="w-2 h-2 bg-purple-400 rounded-full"></div>
-        <h2 class="text-lg font-black text-white uppercase tracking-wide">Plyometrics</h2>
-        <span class="ml-auto text-xs text-purple-400 bg-purple-500/20 px-2 py-1 rounded">SUPERSET</span>
-      </div>
-      
-      <div class="space-y-4">
-        <div class="bg-zinc-950/50 rounded-xl p-4">
-          <div class="flex justify-between items-start mb-2">
-            <span class="text-white font-bold">Seated Box Jump</span>
-            <span class="text-orange-400 font-bold text-sm">3 × 3</span>
-          </div>
-          <a href="https://youtu.be/64OAo8kINPQ" target="_blank" class="text-blue-400 text-xs flex items-center gap-1 hover:text-blue-300">
-            <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M10 16.5l6-4.5-6-4.5v9zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/></svg>
-            Watch form video
-          </a>
-        </div>
-        
-        <div class="bg-zinc-950/50 rounded-xl p-4">
-          <div class="flex justify-between items-start mb-2">
-            <span class="text-white font-bold">Approach Jump</span>
-            <span class="text-orange-400 font-bold text-sm">3 × 3 e.s.</span>
-          </div>
-          <a href="https://youtu.be/YO9TDb8RKsE" target="_blank" class="text-blue-400 text-xs flex items-center gap-1 hover:text-blue-300">
-            <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M10 16.5l6-4.5-6-4.5v9zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/></svg>
-            Watch form video
-          </a>
-        </div>
-      </div>
-    </div>
-
-    <!-- CARD 3: MAIN EXERCISE 1 - BACK SQUAT -->
-    <div class="bg-gradient-to-br from-orange-900/20 to-red-900/20 border border-orange-800/50 rounded-2xl p-6">
-      <div class="flex items-center gap-2 mb-4">
-        <div class="w-2 h-2 bg-orange-400 rounded-full"></div>
-        <h2 class="text-lg font-black text-white uppercase tracking-wide">Main Lift 1</h2>
-        <span class="ml-auto text-xs text-orange-400 bg-orange-500/20 px-2 py-1 rounded">PRIMARY</span>
-      </div>
-      
-      <h3 class="text-2xl font-black text-white mb-4">Back Squat</h3>
-      
-      <!-- Warmup Sets -->
-      <div class="bg-zinc-950/50 rounded-xl p-4 mb-3">
-        <p class="text-xs text-zinc-500 uppercase tracking-wide mb-2">Warmup</p>
-        <div class="flex items-center justify-between">
-          <span class="text-white font-semibold">2 × 5</span>
-          <span class="text-zinc-400 text-sm">@ 5-6 RIR</span>
-        </div>
-      </div>
-      
-      <!-- Working Sets -->
-      <div class="bg-zinc-950/50 rounded-xl p-4 mb-4">
-        <p class="text-xs text-zinc-500 uppercase tracking-wide mb-2">Working Sets</p>
-        <div class="space-y-2">
-          <div class="flex items-center justify-between">
-            <span class="text-orange-400 font-bold">1 × 5</span>
-            <span class="text-orange-400 text-sm">@ 1 RIR</span>
-          </div>
-          <div class="flex items-center justify-between">
-            <span class="text-orange-400 font-bold">3 × 8</span>
-            <span class="text-orange-400 text-sm">@ 2-3 RIR (drop 20%)</span>
-          </div>
-        </div>
-        <p class="text-xs text-zinc-600 mt-2 italic">Work up to a heavy set of 5</p>
-      </div>
-      
-      <!-- Weight Input -->
-      <div class="mb-4">
-        <label class="block text-xs text-zinc-400 uppercase tracking-wide mb-2">Weight (lbs)</label>
-        <input type="number" placeholder="185" class="w-full bg-zinc-900 border border-zinc-700 rounded-lg px-4 py-3 text-white text-lg font-bold focus:outline-none focus:ring-2 focus:ring-orange-500">
-      </div>
-      
-      <!-- Notes Input -->
-      <div class="mb-4">
-        <label class="block text-xs text-zinc-400 uppercase tracking-wide mb-2">Notes</label>
-        <input type="text" placeholder="How did it feel?" class="w-full bg-zinc-900 border border-zinc-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-orange-500">
-      </div>
-      
-      <!-- PR Display -->
-      <div class="bg-green-900/20 border border-green-800/50 rounded-xl p-4 mb-3">
-        <div class="flex items-center justify-between mb-2">
-          <span class="text-xs text-green-400 uppercase tracking-wide">Personal Record</span>
-          <span class="text-2xl font-black text-green-400">225 lbs</span>
-        </div>
-        <p class="text-xs text-zinc-500">Set on 2/8/26 • MC1 W3</p>
-      </div>
-      
-      <!-- Mini Progress Chart -->
-      <div class="bg-zinc-950/50 rounded-xl p-4">
-        <p class="text-xs text-zinc-500 uppercase tracking-wide mb-3">Recent Progress</p>
-        <div class="flex items-end justify-between h-20 gap-1">
-          <div class="flex-1 flex flex-col justify-end">
-            <div class="bg-gradient-to-t from-orange-500 to-red-500 rounded-t" style="height: 60%"></div>
-          </div>
-          <div class="flex-1 flex flex-col justify-end">
-            <div class="bg-gradient-to-t from-orange-500 to-red-500 rounded-t" style="height: 70%"></div>
-          </div>
-          <div class="flex-1 flex flex-col justify-end">
-            <div class="bg-gradient-to-t from-orange-500 to-red-500 rounded-t" style="height: 75%"></div>
-          </div>
-          <div class="flex-1 flex flex-col justify-end">
-            <div class="bg-gradient-to-t from-orange-500 to-red-500 rounded-t" style="height: 85%"></div>
-          </div>
-          <div class="flex-1 flex flex-col justify-end">
-            <div class="bg-gradient-to-t from-orange-500 to-red-500 rounded-t" style="height: 95%"></div>
-          </div>
-          <div class="flex-1 flex flex-col justify-end">
-            <div class="bg-gradient-to-t from-orange-500 to-red-500 rounded-t" style="height: 100%"></div>
-          </div>
-        </div>
-        <p class="text-xs text-zinc-600 mt-2 text-center">Last 6 workouts</p>
-      </div>
-    </div>
-
-    <!-- CARD 4: MAIN EXERCISE 2 - B-STANCE RDL -->
-    <div class="bg-gradient-to-br from-orange-900/20 to-red-900/20 border border-orange-800/50 rounded-2xl p-6">
-      <div class="flex items-center gap-2 mb-4">
-        <div class="w-2 h-2 bg-orange-400 rounded-full"></div>
-        <h2 class="text-lg font-black text-white uppercase tracking-wide">Main Lift 2</h2>
-        <span class="ml-auto text-xs text-orange-400 bg-orange-500/20 px-2 py-1 rounded">PRIMARY</span>
-      </div>
-      
-      <h3 class="text-2xl font-black text-white mb-4">B-Stance RDL</h3>
-      
-      <!-- Warmup Sets -->
-      <div class="bg-zinc-950/50 rounded-xl p-4 mb-3">
-        <p class="text-xs text-zinc-500 uppercase tracking-wide mb-2">Warmup</p>
-        <div class="flex items-center justify-between">
-          <span class="text-white font-semibold">1 × 5</span>
-          <span class="text-zinc-400 text-sm">@ 5-6 RIR</span>
-        </div>
-      </div>
-      
-      <!-- Working Sets -->
-      <div class="bg-zinc-950/50 rounded-xl p-4 mb-4">
-        <p class="text-xs text-zinc-500 uppercase tracking-wide mb-2">Working Sets</p>
-        <div class="flex items-center justify-between">
-          <span class="text-orange-400 font-bold">4 × 6 e.s.</span>
-          <span class="text-orange-400 text-sm">@ 2 RIR</span>
-        </div>
-      </div>
-      
-      <!-- Weight Input -->
-      <div class="mb-4">
-        <label class="block text-xs text-zinc-400 uppercase tracking-wide mb-2">Weight (lbs)</label>
-        <input type="number" placeholder="50" class="w-full bg-zinc-900 border border-zinc-700 rounded-lg px-4 py-3 text-white text-lg font-bold focus:outline-none focus:ring-2 focus:ring-orange-500">
-      </div>
-      
-      <!-- Notes Input -->
-      <div class="mb-4">
-        <label class="block text-xs text-zinc-400 uppercase tracking-wide mb-2">Notes</label>
-        <input type="text" placeholder="How did it feel?" class="w-full bg-zinc-900 border border-zinc-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-orange-500">
-      </div>
-      
-      <!-- PR Display -->
-      <div class="bg-green-900/20 border border-green-800/50 rounded-xl p-4 mb-3">
-        <div class="flex items-center justify-between mb-2">
-          <span class="text-xs text-green-400 uppercase tracking-wide">Personal Record</span>
-          <span class="text-2xl font-black text-green-400">165 lbs</span>
-        </div>
-        <p class="text-xs text-zinc-500">Set on 2/12/26 • MC1 W3</p>
-      </div>
-      
-      <!-- Mini Progress Chart -->
-      <div class="bg-zinc-950/50 rounded-xl p-4">
-        <p class="text-xs text-zinc-500 uppercase tracking-wide mb-3">Recent Progress</p>
-        <div class="flex items-end justify-between h-20 gap-1">
-          <div class="flex-1 flex flex-col justify-end">
-            <div class="bg-gradient-to-t from-orange-500 to-red-500 rounded-t" style="height: 40%"></div>
-          </div>
-          <div class="flex-1 flex flex-col justify-end">
-            <div class="bg-gradient-to-t from-orange-500 to-red-500 rounded-t" style="height: 55%"></div>
-          </div>
-          <div class="flex-1 flex flex-col justify-end">
-            <div class="bg-gradient-to-t from-orange-500 to-red-500 rounded-t" style="height: 70%"></div>
-          </div>
-          <div class="flex-1 flex flex-col justify-end">
-            <div class="bg-gradient-to-t from-orange-500 to-red-500 rounded-t" style="height: 85%"></div>
-          </div>
-          <div class="flex-1 flex flex-col justify-end">
-            <div class="bg-gradient-to-t from-orange-500 to-red-500 rounded-t" style="height: 95%"></div>
-          </div>
-          <div class="flex-1 flex flex-col justify-end">
-            <div class="bg-gradient-to-t from-orange-500 to-red-500 rounded-t" style="height: 100%"></div>
-          </div>
-        </div>
-        <p class="text-xs text-zinc-600 mt-2 text-center">Last 6 workouts</p>
-      </div>
-    </div>
-
-    <!-- CARD 5: TRISET 1 -->
-    <div class="bg-zinc-900/50 border border-zinc-800 rounded-2xl p-6">
-      <div class="flex items-center gap-2 mb-4">
-        <div class="w-2 h-2 bg-cyan-400 rounded-full"></div>
-        <h2 class="text-lg font-black text-white uppercase tracking-wide">Triset 1</h2>
-        <span class="ml-auto text-xs text-cyan-400 bg-cyan-500/20 px-2 py-1 rounded">3 EXERCISES</span>
-      </div>
-      
-      <div class="space-y-4">
-        <div class="bg-zinc-950/50 rounded-xl p-4">
-          <div class="flex justify-between items-start mb-3">
-            <div>
-              <h4 class="text-white font-bold">Walking Lunge</h4>
-              <p class="text-sm text-orange-400 font-semibold">3 × 8 e.s.</p>
-            </div>
-          </div>
-          <input type="number" placeholder="Weight (lbs)" class="w-full bg-zinc-900 border border-zinc-700 rounded-lg px-3 py-2 text-white text-sm mb-2">
-          <input type="text" placeholder="Notes" class="w-full bg-zinc-900 border border-zinc-700 rounded-lg px-3 py-2 text-white text-sm mb-2">
-          <div class="flex items-center justify-between text-xs">
-            <span class="text-zinc-600">PR:</span>
-            <span class="text-green-400 font-bold">65 lbs</span>
-          </div>
-        </div>
-        
-        <div class="bg-zinc-950/50 rounded-xl p-4">
-          <div class="flex justify-between items-start mb-3">
-            <div>
-              <h4 class="text-white font-bold">Pull Up</h4>
-              <p class="text-sm text-orange-400 font-semibold">3 × 5</p>
-            </div>
-          </div>
-          <input type="number" placeholder="Weight (lbs)" class="w-full bg-zinc-900 border border-zinc-700 rounded-lg px-3 py-2 text-white text-sm mb-2">
-          <input type="text" placeholder="Notes" class="w-full bg-zinc-900 border border-zinc-700 rounded-lg px-3 py-2 text-white text-sm mb-2">
-          <div class="flex items-center justify-between text-xs">
-            <span class="text-zinc-600">PR:</span>
-            <span class="text-green-400 font-bold">BW +25 lbs</span>
-          </div>
-        </div>
-        
-        <div class="bg-zinc-950/50 rounded-xl p-4">
-          <div class="flex justify-between items-start mb-3">
-            <div>
-              <h4 class="text-white font-bold">KB Swings</h4>
-              <p class="text-sm text-orange-400 font-semibold">3 × 20</p>
-            </div>
-          </div>
-          <input type="number" placeholder="Weight (lbs)" class="w-full bg-zinc-900 border border-zinc-700 rounded-lg px-3 py-2 text-white text-sm mb-2">
-          <input type="text" placeholder="Notes" class="w-full bg-zinc-900 border border-zinc-700 rounded-lg px-3 py-2 text-white text-sm mb-2">
-          <div class="flex items-center justify-between text-xs">
-            <span class="text-zinc-600">PR:</span>
-            <span class="text-green-400 font-bold">53 lbs</span>
-          </div>
-        </div>
-      </div>
-      
-      <div class="mt-4 pt-4 border-t border-zinc-800">
-        <p class="text-xs text-zinc-500">
-          <span class="font-semibold">Rest:</span> 1-2 min after triset • 10-30 sec between exercises
-        </p>
-      </div>
-    </div>
-
-    <!-- CARD 6: TRISET 2 -->
-    <div class="bg-zinc-900/50 border border-zinc-800 rounded-2xl p-6">
-      <div class="flex items-center gap-2 mb-4">
-        <div class="w-2 h-2 bg-cyan-400 rounded-full"></div>
-        <h2 class="text-lg font-black text-white uppercase tracking-wide">Triset 2</h2>
-        <span class="ml-auto text-xs text-cyan-400 bg-cyan-500/20 px-2 py-1 rounded">3 EXERCISES</span>
-      </div>
-      
-      <div class="space-y-4">
-        <div class="bg-zinc-950/50 rounded-xl p-4">
-          <div class="flex justify-between items-start mb-3">
-            <div>
-              <h4 class="text-white font-bold">V-ups</h4>
-              <p class="text-sm text-orange-400 font-semibold">3 × 8</p>
-            </div>
-          </div>
-          <input type="text" placeholder="Notes" class="w-full bg-zinc-900 border border-zinc-700 rounded-lg px-3 py-2 text-white text-sm">
-        </div>
-        
-        <div class="bg-zinc-950/50 rounded-xl p-4">
-          <div class="flex justify-between items-start mb-3">
-            <div>
-              <h4 class="text-white font-bold">Cossack Squat</h4>
-              <p class="text-sm text-orange-400 font-semibold">3 × 8 e.s.</p>
-            </div>
-          </div>
-          <input type="number" placeholder="Weight (lbs)" class="w-full bg-zinc-900 border border-zinc-700 rounded-lg px-3 py-2 text-white text-sm mb-2">
-          <input type="text" placeholder="Notes" class="w-full bg-zinc-900 border border-zinc-700 rounded-lg px-3 py-2 text-white text-sm">
-        </div>
-        
-        <div class="bg-zinc-950/50 rounded-xl p-4">
-          <div class="flex justify-between items-start mb-3">
-            <div>
-              <h4 class="text-white font-bold">Split Squat Iso</h4>
-              <p class="text-sm text-orange-400 font-semibold">3 × 30 sec</p>
-            </div>
-          </div>
-          <input type="number" placeholder="Weight (lbs)" class="w-full bg-zinc-900 border border-zinc-700 rounded-lg px-3 py-2 text-white text-sm mb-2">
-          <input type="text" placeholder="Notes" class="w-full bg-zinc-900 border border-zinc-700 rounded-lg px-3 py-2 text-white text-sm mb-2">
-          <p class="text-xs text-zinc-600 italic">Use weight if possible</p>
-        </div>
-      </div>
-      
-      <div class="mt-4 pt-4 border-t border-zinc-800">
-        <p class="text-xs text-zinc-500">
-          <span class="font-semibold">Rest:</span> 1 min after triset • 10-30 sec between exercises
-        </p>
-      </div>
-    </div>
-
-    <!-- CARD 7: CONDITIONING -->
-    <div class="bg-gradient-to-br from-red-900/20 to-orange-900/20 border border-red-800/50 rounded-2xl p-6">
-      <div class="flex items-center gap-2 mb-4">
-        <div class="w-2 h-2 bg-red-400 rounded-full"></div>
-        <h2 class="text-lg font-black text-white uppercase tracking-wide">Conditioning</h2>
-        <span class="ml-auto text-xs text-red-400 bg-red-500/20 px-2 py-1 rounded">FINISHER</span>
-      </div>
-      
-      <div class="bg-zinc-950/50 rounded-xl p-4">
-        <h4 class="text-white font-bold mb-2">Air Bike or Sled</h4>
-        <div class="flex items-center justify-between mb-3">
-          <span class="text-orange-400 font-bold">10 × 30 sec</span>
-          <span class="text-red-400 text-sm font-semibold">HARD</span>
-        </div>
-        <input type="text" placeholder="Notes" class="w-full bg-zinc-900 border border-zinc-700 rounded-lg px-3 py-2 text-white text-sm mb-2">
-        <p class="text-xs text-zinc-600">
-          <span class="font-semibold">Rest:</span> 30 sec between intervals
-        </p>
-      </div>
-    </div>
-
-    <!-- Complete Workout Button -->
-    <button class="w-full bg-gradient-to-r from-green-600 to-green-500 hover:from-green-500 hover:to-green-400 text-white px-6 py-4 rounded-xl font-black text-lg transition-all shadow-lg">
-      ✓ Complete Workout
+<!-- CARD 2: PLYOS -->
+<div class="workout-card next" data-card="1">
+  <div class="bg-zinc-900/50 border border-zinc-800 rounded-2xl p-6 relative">
+    <button onclick="markComplete(1)" class="absolute top-4 right-4 w-10 h-10 rounded-full border-2 border-zinc-700 flex items-center justify-center text-zinc-700 hover:border-green-500 hover:text-green-500 transition-all" id="check-1">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <polyline points="20 6 9 17 4 12" stroke-width="3"/>
+      </svg>
     </button>
     
+    <div class="flex items-center gap-2 mb-4">
+      <div class="w-2 h-2 bg-purple-400 rounded-full"></div>
+      <h2 class="text-lg font-black text-white uppercase tracking-wide">Plyometrics</h2>
+      <span class="ml-auto text-xs text-purple-400 bg-purple-500/20 px-2 py-1 rounded">SUPERSET</span>
+    </div>
+    
+    <div class="space-y-4">
+      <div class="bg-zinc-950/50 rounded-xl p-4">
+        <div class="flex justify-between items-start mb-2">
+          <span class="text-white font-bold">Seated Box Jump</span>
+          <span class="text-orange-400 font-bold text-sm">3 × 3</span>
+        </div>
+        <a href="https://youtu.be/64OAo8kINPQ" target="_blank" class="text-blue-400 text-xs flex items-center gap-1 hover:text-blue-300">
+          <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M10 16.5l6-4.5-6-4.5v9zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/></svg>
+          Watch form video
+        </a>
+      </div>
+      
+      <div class="bg-zinc-950/50 rounded-xl p-4">
+        <div class="flex justify-between items-start mb-2">
+          <span class="text-white font-bold">Approach Jump</span>
+          <span class="text-orange-400 font-bold text-sm">3 × 3 e.s.</span>
+        </div>
+        <a href="https://youtu.be/YO9TDb8RKsE" target="_blank" class="text-blue-400 text-xs flex items-center gap-1 hover:text-blue-300">
+          <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M10 16.5l6-4.5-6-4.5v9zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/></svg>
+          Watch form video
+        </a>
+      </div>
+    </div>
   </div>
+</div>
+
+<!-- CARD 3: BACK SQUAT -->
+<div class="workout-card hidden" data-card="2">
+  <div class="bg-gradient-to-br from-orange-900/20 to-red-900/20 border border-orange-800/50 rounded-2xl p-6 relative overflow-y-auto max-h-[calc(100vh-250px)]">
+    <button onclick="markComplete(2)" class="absolute top-4 right-4 w-10 h-10 rounded-full border-2 border-zinc-700 flex items-center justify-center text-zinc-700 hover:border-green-500 hover:text-green-500 transition-all z-10" id="check-2">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <polyline points="20 6 9 17 4 12" stroke-width="3"/>
+      </svg>
+    </button>
+    
+    <div class="flex items-center gap-2 mb-4">
+      <div class="w-2 h-2 bg-orange-400 rounded-full"></div>
+      <h2 class="text-lg font-black text-white uppercase tracking-wide">Main Lift 1</h2>
+      <span class="ml-auto text-xs text-orange-400 bg-orange-500/20 px-2 py-1 rounded">PRIMARY</span>
+    </div>
+    
+    <h3 class="text-2xl font-black text-white mb-3">Back Squat</h3>
+    
+    <a href="https://youtu.be/j-KDHkRMer0" target="_blank" class="text-blue-400 text-sm flex items-center gap-1 hover:text-blue-300 mb-4">
+      <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M10 16.5l6-4.5-6-4.5v9zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/></svg>
+      Watch form video
+    </a>
+    
+    <!-- Warmup Sets -->
+    <div class="bg-zinc-950/50 rounded-xl p-3 mb-3">
+      <p class="text-xs text-zinc-500 uppercase tracking-wide mb-1">Warmup</p>
+      <div class="flex items-center justify-between">
+        <span class="text-white font-semibold text-sm">2 × 5</span>
+        <span class="text-zinc-400 text-xs">@ 5-6 RIR</span>
+      </div>
+    </div>
+    
+    <!-- Working Sets -->
+    <div class="bg-zinc-950/50 rounded-xl p-3 mb-3">
+      <p class="text-xs text-zinc-500 uppercase tracking-wide mb-2">Working Sets</p>
+      <div class="space-y-1">
+        <div class="flex items-center justify-between">
+          <span class="text-orange-400 font-bold text-sm">1 × 5</span>
+          <span class="text-orange-400 text-xs">@ 1 RIR</span>
+        </div>
+        <div class="flex items-center justify-between">
+          <span class="text-orange-400 font-bold text-sm">3 × 8</span>
+          <span class="text-orange-400 text-xs">@ 2-3 RIR (drop 20%)</span>
+        </div>
+      </div>
+      <p class="text-xs text-zinc-600 mt-2 italic">Work up to heavy 5</p>
+    </div>
+    
+    <!-- Weight Input -->
+    <div class="mb-3">
+      <label class="block text-xs text-zinc-400 uppercase tracking-wide mb-1">Weight (lbs)</label>
+      <input type="number" placeholder="185" class="w-full bg-zinc-900 border border-zinc-700 rounded-lg px-3 py-2 text-white text-lg font-bold">
+    </div>
+    
+    <!-- Notes -->
+    <div class="mb-3">
+      <label class="block text-xs text-zinc-400 uppercase tracking-wide mb-1">Notes</label>
+      <input type="text" placeholder="How did it feel?" class="w-full bg-zinc-900 border border-zinc-700 rounded-lg px-3 py-2 text-white text-sm">
+    </div>
+    
+    <!-- PR Display -->
+    <div class="bg-green-900/20 border border-green-800/50 rounded-xl p-3 mb-3">
+      <div class="flex items-center justify-between mb-1">
+        <span class="text-xs text-green-400 uppercase tracking-wide">PR</span>
+        <span class="text-xl font-black text-green-400">225 lbs</span>
+      </div>
+      <p class="text-xs text-zinc-500">2/8/26 • MC1 W3</p>
+    </div>
+    
+    <!-- Mini Chart -->
+    <div class="bg-zinc-950/50 rounded-xl p-3">
+      <p class="text-xs text-zinc-500 uppercase tracking-wide mb-2">Progress</p>
+      <div class="flex items-end justify-between h-16 gap-1">
+        <div class="flex-1 flex flex-col justify-end">
+          <div class="bg-gradient-to-t from-orange-500 to-red-500 rounded-t" style="height: 60%"></div>
+        </div>
+        <div class="flex-1 flex flex-col justify-end">
+          <div class="bg-gradient-to-t from-orange-500 to-red-500 rounded-t" style="height: 75%"></div>
+        </div>
+        <div class="flex-1 flex flex-col justify-end">
+          <div class="bg-gradient-to-t from-orange-500 to-red-500 rounded-t" style="height: 85%"></div>
+        </div>
+        <div class="flex-1 flex flex-col justify-end">
+          <div class="bg-gradient-to-t from-orange-500 to-red-500 rounded-t" style="height: 95%"></div>
+        </div>
+        <div class="flex-1 flex flex-col justify-end">
+          <div class="bg-gradient-to-t from-orange-500 to-red-500 rounded-t" style="height: 100%"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CARD 4: B-STANCE RDL -->
+<div class="workout-card hidden" data-card="3">
+  <div class="bg-gradient-to-br from-orange-900/20 to-red-900/20 border border-orange-800/50 rounded-2xl p-6 relative overflow-y-auto max-h-[calc(100vh-250px)]">
+    <button onclick="markComplete(3)" class="absolute top-4 right-4 w-10 h-10 rounded-full border-2 border-zinc-700 flex items-center justify-center text-zinc-700 hover:border-green-500 hover:text-green-500 transition-all z-10" id="check-3">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <polyline points="20 6 9 17 4 12" stroke-width="3"/>
+      </svg>
+    </button>
+    
+    <div class="flex items-center gap-2 mb-4">
+      <div class="w-2 h-2 bg-orange-400 rounded-full"></div>
+      <h2 class="text-lg font-black text-white uppercase tracking-wide">Main Lift 2</h2>
+      <span class="ml-auto text-xs text-orange-400 bg-orange-500/20 px-2 py-1 rounded">PRIMARY</span>
+    </div>
+    
+    <h3 class="text-2xl font-black text-white mb-3">B-Stance RDL</h3>
+    
+    <a href="https://youtu.be/geLox27yGwM" target="_blank" class="text-blue-400 text-sm flex items-center gap-1 hover:text-blue-300 mb-4">
+      <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M10 16.5l6-4.5-6-4.5v9zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/></svg>
+      Watch form video
+    </a>
+    
+    <div class="bg-zinc-950/50 rounded-xl p-3 mb-3">
+      <p class="text-xs text-zinc-500 uppercase tracking-wide mb-1">Warmup</p>
+      <span class="text-white font-semibold text-sm">1 × 5 @ 5-6 RIR</span>
+    </div>
+    
+    <div class="bg-zinc-950/50 rounded-xl p-3 mb-3">
+      <p class="text-xs text-zinc-500 uppercase tracking-wide mb-1">Working Sets</p>
+      <span class="text-orange-400 font-bold text-sm">4 × 6 e.s. @ 2 RIR</span>
+    </div>
+    
+    <div class="mb-3">
+      <label class="block text-xs text-zinc-400 uppercase mb-1">Weight (lbs)</label>
+      <input type="number" placeholder="50" class="w-full bg-zinc-900 border border-zinc-700 rounded-lg px-3 py-2 text-white text-lg font-bold">
+    </div>
+    
+    <div class="mb-3">
+      <label class="block text-xs text-zinc-400 uppercase mb-1">Notes</label>
+      <input type="text" placeholder="How did it feel?" class="w-full bg-zinc-900 border border-zinc-700 rounded-lg px-3 py-2 text-white text-sm">
+    </div>
+    
+    <div class="bg-green-900/20 border border-green-800/50 rounded-xl p-3 mb-3">
+      <div class="flex items-center justify-between mb-1">
+        <span class="text-xs text-green-400 uppercase">PR</span>
+        <span class="text-xl font-black text-green-400">165 lbs</span>
+      </div>
+      <p class="text-xs text-zinc-500">2/12/26 • MC1 W3</p>
+    </div>
+    
+    <div class="bg-zinc-950/50 rounded-xl p-3">
+      <p class="text-xs text-zinc-500 uppercase mb-2">Progress</p>
+      <div class="flex items-end justify-between h-16 gap-1">
+        <div class="flex-1 flex flex-col justify-end"><div class="bg-gradient-to-t from-orange-500 to-red-500 rounded-t" style="height: 55%"></div></div>
+        <div class="flex-1 flex flex-col justify-end"><div class="bg-gradient-to-t from-orange-500 to-red-500 rounded-t" style="height: 70%"></div></div>
+        <div class="flex-1 flex flex-col justify-end"><div class="bg-gradient-to-t from-orange-500 to-red-500 rounded-t" style="height: 85%"></div></div>
+        <div class="flex-1 flex flex-col justify-end"><div class="bg-gradient-to-t from-orange-500 to-red-500 rounded-t" style="height: 95%"></div></div>
+        <div class="flex-1 flex flex-col justify-end"><div class="bg-gradient-to-t from-orange-500 to-red-500 rounded-t" style="height: 100%"></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CARD 5: TRISET 1 -->
+<div class="workout-card hidden" data-card="4">
+  <div class="bg-zinc-900/50 border border-zinc-800 rounded-2xl p-6 relative overflow-y-auto max-h-[calc(100vh-250px)]">
+    <button onclick="markComplete(4)" class="absolute top-4 right-4 w-10 h-10 rounded-full border-2 border-zinc-700 flex items-center justify-center text-zinc-700 hover:border-green-500 hover:text-green-500 transition-all z-10" id="check-4">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <polyline points="20 6 9 17 4 12" stroke-width="3"/>
+      </svg>
+    </button>
+    
+    <div class="flex items-center gap-2 mb-4">
+      <div class="w-2 h-2 bg-cyan-400 rounded-full"></div>
+      <h2 class="text-lg font-black text-white uppercase tracking-wide">Triset 1</h2>
+      <span class="ml-auto text-xs text-cyan-400 bg-cyan-500/20 px-2 py-1 rounded">3 EXERCISES</span>
+    </div>
+    
+    <div class="space-y-3">
+      <div class="bg-zinc-950/50 rounded-xl p-3">
+        <div class="flex justify-between items-start mb-2">
+          <h4 class="text-white font-bold text-sm">Walking Lunge</h4>
+          <span class="text-orange-400 font-bold text-xs">3 × 8 e.s.</span>
+        </div>
+        <a href="https://youtu.be/mAgbXQdd4LM" target="_blank" class="text-blue-400 text-xs flex items-center gap-1 hover:text-blue-300 mb-2">
+          <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M10 16.5l6-4.5-6-4.5v9zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/></svg>
+          Form video
+        </a>
+        <input type="number" placeholder="Weight" class="w-full bg-zinc-900 border border-zinc-700 rounded px-2 py-1 text-white text-sm mb-1">
+        <input type="text" placeholder="Notes" class="w-full bg-zinc-900 border border-zinc-700 rounded px-2 py-1 text-white text-xs">
+        <div class="flex items-center justify-between text-xs mt-1">
+          <span class="text-zinc-600">PR:</span>
+          <span class="text-green-400 font-bold">65 lbs</span>
+        </div>
+      </div>
+      
+      <div class="bg-zinc-950/50 rounded-xl p-3">
+        <div class="flex justify-between items-start mb-2">
+          <h4 class="text-white font-bold text-sm">Pull Up</h4>
+          <span class="text-orange-400 font-bold text-xs">3 × 5</span>
+        </div>
+        <a href="https://youtu.be/jgFel4wZl3I" target="_blank" class="text-blue-400 text-xs flex items-center gap-1 hover:text-blue-300 mb-2">
+          <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M10 16.5l6-4.5-6-4.5v9zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/></svg>
+          Form video
+        </a>
+        <input type="number" placeholder="Weight" class="w-full bg-zinc-900 border border-zinc-700 rounded px-2 py-1 text-white text-sm mb-1">
+        <input type="text" placeholder="Notes" class="w-full bg-zinc-900 border border-zinc-700 rounded px-2 py-1 text-white text-xs">
+        <div class="flex items-center justify-between text-xs mt-1">
+          <span class="text-zinc-600">PR:</span>
+          <span class="text-green-400 font-bold">BW +25</span>
+        </div>
+      </div>
+      
+      <div class="bg-zinc-950/50 rounded-xl p-3">
+        <div class="flex justify-between items-start mb-2">
+          <h4 class="text-white font-bold text-sm">KB Swings</h4>
+          <span class="text-orange-400 font-bold text-xs">3 × 20</span>
+        </div>
+        <a href="https://youtu.be/8C56NDNZ1i4" target="_blank" class="text-blue-400 text-xs flex items-center gap-1 hover:text-blue-300 mb-2">
+          <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M10 16.5l6-4.5-6-4.5v9zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/></svg>
+          Form video
+        </a>
+        <input type="number" placeholder="Weight" class="w-full bg-zinc-900 border border-zinc-700 rounded px-2 py-1 text-white text-sm mb-1">
+        <input type="text" placeholder="Notes" class="w-full bg-zinc-900 border border-zinc-700 rounded px-2 py-1 text-white text-xs">
+        <div class="flex items-center justify-between text-xs mt-1">
+          <span class="text-zinc-600">PR:</span>
+          <span class="text-green-400 font-bold">53 lbs</span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="mt-3 pt-3 border-t border-zinc-800">
+      <p class="text-xs text-zinc-500">
+        Rest: 1-2 min after • 10-30s between
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- CARD 6: TRISET 2 -->
+<div class="workout-card hidden" data-card="5">
+  <div class="bg-zinc-900/50 border border-zinc-800 rounded-2xl p-6 relative overflow-y-auto max-h-[calc(100vh-250px)]">
+    <button onclick="markComplete(5)" class="absolute top-4 right-4 w-10 h-10 rounded-full border-2 border-zinc-700 flex items-center justify-center text-zinc-700 hover:border-green-500 hover:text-green-500 transition-all z-10" id="check-5">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <polyline points="20 6 9 17 4 12" stroke-width="3"/>
+      </svg>
+    </button>
+    
+    <div class="flex items-center gap-2 mb-4">
+      <div class="w-2 h-2 bg-cyan-400 rounded-full"></div>
+      <h2 class="text-lg font-black text-white uppercase tracking-wide">Triset 2</h2>
+      <span class="ml-auto text-xs text-cyan-400 bg-cyan-500/20 px-2 py-1 rounded">3 EXERCISES</span>
+    </div>
+    
+    <div class="space-y-3">
+      <div class="bg-zinc-950/50 rounded-xl p-3">
+        <div class="flex justify-between items-start mb-2">
+          <h4 class="text-white font-bold text-sm">V-ups</h4>
+          <span class="text-orange-400 font-bold text-xs">3 × 8</span>
+        </div>
+        <a href="https://youtu.be/dFVjNxRREKk" target="_blank" class="text-blue-400 text-xs flex items-center gap-1 hover:text-blue-300 mb-2">
+          <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M10 16.5l6-4.5-6-4.5v9zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/></svg>
+          Form video
+        </a>
+        <input type="text" placeholder="Notes" class="w-full bg-zinc-900 border border-zinc-700 rounded px-2 py-1 text-white text-xs">
+      </div>
+      
+      <div class="bg-zinc-950/50 rounded-xl p-3">
+        <div class="flex justify-between items-start mb-2">
+          <h4 class="text-white font-bold text-sm">Cossack Squat</h4>
+          <span class="text-orange-400 font-bold text-xs">3 × 8 e.s.</span>
+        </div>
+        <a href="https://youtu.be/rSaWYv37zzE" target="_blank" class="text-blue-400 text-xs flex items-center gap-1 hover:text-blue-300 mb-2">
+          <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M10 16.5l6-4.5-6-4.5v9zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/></svg>
+          Form video
+        </a>
+        <input type="number" placeholder="Weight" class="w-full bg-zinc-900 border border-zinc-700 rounded px-2 py-1 text-white text-sm mb-1">
+        <input type="text" placeholder="Notes" class="w-full bg-zinc-900 border border-zinc-700 rounded px-2 py-1 text-white text-xs">
+      </div>
+      
+      <div class="bg-zinc-950/50 rounded-xl p-3">
+        <div class="flex justify-between items-start mb-2">
+          <h4 class="text-white font-bold text-sm">Split Squat Iso</h4>
+          <span class="text-orange-400 font-bold text-xs">3 × 30 sec</span>
+        </div>
+        <a href="https://youtu.be/MPaJ7-EgV9E" target="_blank" class="text-blue-400 text-xs flex items-center gap-1 hover:text-blue-300 mb-2">
+          <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M10 16.5l6-4.5-6-4.5v9zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/></svg>
+          Form video
+        </a>
+        <input type="number" placeholder="Weight" class="w-full bg-zinc-900 border border-zinc-700 rounded px-2 py-1 text-white text-sm mb-1">
+        <input type="text" placeholder="Notes" class="w-full bg-zinc-900 border border-zinc-700 rounded px-2 py-1 text-white text-xs mb-1">
+        <p class="text-xs text-zinc-600 italic">Use weight if possible</p>
+      </div>
+    </div>
+    
+    <div class="mt-3 pt-3 border-t border-zinc-800">
+      <p class="text-xs text-zinc-500">
+        Rest: 1 min after • 10-30s between
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- CARD 7: CONDITIONING -->
+<div class="workout-card hidden" data-card="6">
+  <div class="bg-gradient-to-br from-red-900/20 to-orange-900/20 border border-red-800/50 rounded-2xl p-6 relative">
+    <button onclick="markComplete(6)" class="absolute top-4 right-4 w-10 h-10 rounded-full border-2 border-zinc-700 flex items-center justify-center text-zinc-700 hover:border-green-500 hover:text-green-500 transition-all z-10" id="check-6">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <polyline points="20 6 9 17 4 12" stroke-width="3"/>
+      </svg>
+    </button>
+    
+    <div class="flex items-center gap-2 mb-4">
+      <div class="w-2 h-2 bg-red-400 rounded-full"></div>
+      <h2 class="text-lg font-black text-white uppercase tracking-wide">Conditioning</h2>
+      <span class="ml-auto text-xs text-red-400 bg-red-500/20 px-2 py-1 rounded">FINISHER</span>
+    </div>
+    
+    <div class="bg-zinc-950/50 rounded-xl p-4">
+      <h4 class="text-white font-bold mb-3">Air Bike or Sled</h4>
+      <div class="flex items-center justify-between mb-3">
+        <span class="text-orange-400 font-bold">10 × 30 sec</span>
+        <span class="text-red-400 text-sm font-semibold">HARD</span>
+      </div>
+      <input type="text" placeholder="Notes" class="w-full bg-zinc-900 border border-zinc-700 rounded-lg px-3 py-2 text-white text-sm mb-2">
+      <p class="text-xs text-zinc-600">
+        Rest: 30 sec between intervals
+      </p>
+    </div>
+  </div>
+</div>
+```
+
+  </div>
+
+  <!-- Bottom Navigation -->
+
+  <div class="fixed bottom-0 left-0 right-0 bg-zinc-950/95 backdrop-blur-sm border-t border-zinc-800 p-6">
+    <div class="flex items-center justify-between max-w-lg mx-auto">
+      <button onclick="prevCard()" id="prevBtn" class="px-6 py-3 bg-zinc-800 text-white rounded-xl font-bold disabled:opacity-50 disabled:cursor-not-allowed">
+        ← Previous
+      </button>
+
+```
+  <button onclick="nextCard()" id="nextBtn" class="px-6 py-3 bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-xl font-bold">
+    Next →
+  </button>
+</div>
+```
+
+  </div>
+
+  <style>
+    .dot {
+      width: 8px;
+      height: 8px;
+      background: #3f3f46;
+      border-radius: 50%;
+      transition: all 0.3s ease;
+    }
+    .dot.active {
+      width: 24px;
+      border-radius: 4px;
+      background: linear-gradient(to right, #f97316, #ef4444);
+    }
+    .dot.completed {
+      background: #22c55e;
+    }
+  </style>
+
+  <script>
+    let currentCard = 0;
+    const totalCards = 7;
+    const completedCards = new Set();
+    
+    function updateCardPositions() {
+      const cards = document.querySelectorAll('.workout-card');
+      cards.forEach((card, index) => {
+        const cardNum = parseInt(card.dataset.card);
+        card.classList.remove('active', 'prev', 'next', 'hidden');
+        
+        if (cardNum === currentCard) {
+          card.classList.add('active');
+        } else if (cardNum === currentCard - 1) {
+          card.classList.add('prev');
+        } else if (cardNum === currentCard + 1) {
+          card.classList.add('next');
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+      
+      // Update dots
+      document.querySelectorAll('.dot').forEach((dot, index) => {
+        dot.classList.remove('active');
+        if (index === currentCard) {
+          dot.classList.add('active');
+        }
+      });
+      
+      // Update buttons
+      document.getElementById('prevBtn').disabled = currentCard === 0;
+      document.getElementById('nextBtn').textContent = currentCard === totalCards - 1 ? 'Finish Workout' : 'Next →';
+      
+      // Update progress
+      updateProgress();
+    }
+    
+    function nextCard() {
+      if (currentCard < totalCards - 1) {
+        currentCard++;
+        updateCardPositions();
+      } else {
+        // Finish workout
+        alert('Workout Complete! 🎉');
+      }
+    }
+    
+    function prevCard() {
+      if (currentCard > 0) {
+        currentCard--;
+        updateCardPositions();
+      }
+    }
+    
+    function markComplete(cardNum) {
+      const checkBtn = document.getElementById(`check-${cardNum}`);
+      
+      if (completedCards.has(cardNum)) {
+        // Unmark
+        completedCards.delete(cardNum);
+        checkBtn.classList.remove('bg-green-500', 'border-green-500', 'text-white');
+        checkBtn.classList.add('border-zinc-700', 'text-zinc-700');
+        document.querySelector(`.dot[data-index="${cardNum}"]`).classList.remove('completed');
+      } else {
+        // Mark complete
+        completedCards.add(cardNum);
+        checkBtn.classList.remove('border-zinc-700', 'text-zinc-700');
+        checkBtn.classList.add('bg-green-500', 'border-green-500', 'text-white');
+        document.querySelector(`.dot[data-index="${cardNum}"]`).classList.add('completed');
+      }
+      
+      updateProgress();
+    }
+    
+    function updateProgress() {
+      const progress = (completedCards.size / totalCards) * 100;
+      document.getElementById('progressBar').style.width = progress + '%';
+      document.getElementById('progressText').textContent = `${completedCards.size}/${totalCards}`;
+    }
+    
+    function goBack() {
+      if (confirm('Exit workout? Progress will be lost.')) {
+        window.history.back();
+      }
+    }
+    
+    // Swipe detection
+    let touchStartX = 0;
+    let touchEndX = 0;
+    
+    document.addEventListener('touchstart', e => {
+      touchStartX = e.changedTouches[0].screenX;
+    });
+    
+    document.addEventListener('touchend', e => {
+      touchEndX = e.changedTouches[0].screenX;
+      handleSwipe();
+    });
+    
+    function handleSwipe() {
+      const swipeThreshold = 50;
+      if (touchStartX - touchEndX > swipeThreshold) {
+        // Swipe left - next card
+        nextCard();
+      }
+      if (touchEndX - touchStartX > swipeThreshold) {
+        // Swipe right - previous card
+        prevCard();
+      }
+    }
+    
+    // Initialize
+    updateCardPositions();
+  </script>
 
 </body>
 </html>
