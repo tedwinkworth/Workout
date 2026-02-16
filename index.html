@@ -260,7 +260,7 @@ const WORKOUT_DATA = {"workouts":[{"phase":1,"week":1,"day":1,"title":"Day 1 Low
 </script>
   <script>
     // Google Sheets Integration - REPLACE WITH YOUR DEPLOYED WEB APP URL
-    const APPS_SCRIPT_URL = https://script.google.com/macros/s/AKfycbyApO5TRokbe4YgdE-vnnAfO1SpDjrkmFf96bk_09PJjbeG30x211JrPQwaFQpCn4y-Qg/exec; // e.g., 'https://script.google.com/macros/s/XXXXX/exec'
+    const APPS_SCRIPT_URL = 'YOUR_WEB_APP_URL_HERE'; // e.g., 'https://script.google.com/macros/s/XXXXX/exec'
     
     // PR Data Cache
     let prData = {};
@@ -599,36 +599,62 @@ const WORKOUT_DATA = {"workouts":[{"phase":1,"week":1,"day":1,"title":"Day 1 Low
       // Group into logical cards
       const cards = [];
       
-      // Warmup card
-      if (sections['Warmup'] || sections['Main']) {
-        const warmupExercises = sections['Warmup'] || sections['Main'].slice(0, 4);
+      // Warmup card (first 4 exercises from Main section)
+      const warmupExercises = (sections['Main'] || []).slice(0, 4);
+      if (warmupExercises.length > 0) {
         cards.push({ type: 'warmup', exercises: warmupExercises });
       }
       
-      // Plyos card
-      if (sections['Plyos'] || sections['Super set']) {
-        const plyoExercises = (sections['Plyos'] || []).concat(
-          (sections['Super set'] || []).filter(e => e.name.toLowerCase().includes('jump') || e.name.toLowerCase().includes('plyo'))
-        ).slice(0, 2);
-        if (plyoExercises.length > 0) {
-          cards.push({ type: 'plyos', exercises: plyoExercises });
-        }
+      // Plyos card (look for jump/plyo exercises)
+      const allExercises = workout.exercises;
+      const plyoExercises = allExercises.filter(e => 
+        (e.name.toLowerCase().includes('jump') || 
+         e.name.toLowerCase().includes('plyo')) &&
+        !e.name.toLowerCase().includes('squat')
+      );
+      if (plyoExercises.length > 0) {
+        cards.push({ type: 'plyos', exercises: plyoExercises.slice(0, 3) });
       }
       
-      // Main lifts
-      const mainLifts = (sections['Super set'] || sections['Main'] || []).filter(e => 
-        e.name.toLowerCase().includes('squat') || 
-        e.name.toLowerCase().includes('bench') ||
-        e.name.toLowerCase().includes('rdl') ||
-        e.name.toLowerCase().includes('press') ||
-        e.name.toLowerCase().includes('pulldown')
-      );
+      // Main lifts - PRIMARY compound movements only
+      // These are typically: squat, bench, deadlift, RDL, press, pulldown
+      // They have: (1) warmup sets AND working sets, (2) programmed weight
+      const primaryLiftNames = [
+        'back squat', 'front squat', 'squat',
+        'bench press', 'bench', 
+        'deadlift', 'rdl',
+        'overhead press', 'shoulder press', 'press',
+        'lat pulldown', 'pulldown',
+        'barbell row', 'pendlay row'
+      ];
       
-      mainLifts.slice(0, 2).forEach(ex => {
+      const mainLifts = allExercises.filter(e => {
+        const name = e.name.toLowerCase().trim();
+        
+        // Must match a primary lift name
+        const isPrimaryLift = primaryLiftNames.some(pattern => {
+          // Exact match or contains pattern
+          return name === pattern || 
+                 name.startsWith(pattern) || 
+                 name.includes(pattern + ' ') ||
+                 name.includes(' ' + pattern);
+        });
+        
+        // Must have both warmup and working sets (indicates main lift)
+        const hasProperSets = e.warmup_sets && e.working_sets;
+        
+        // Exclude triset/accessory exercises
+        const notInTriset = e.section !== 'Triset';
+        
+        return isPrimaryLift && hasProperSets && notInTriset;
+      });
+      
+      // Add each main lift as separate card (max 2-3)
+      mainLifts.slice(0, 3).forEach(ex => {
         cards.push({ type: 'main', exercises: [ex] });
       });
       
-      // Trisets
+      // Trisets (everything in Triset section)
       if (sections['Triset']) {
         // Group triset exercises in sets of 3
         for (let i = 0; i < sections['Triset'].length; i += 3) {
@@ -636,12 +662,10 @@ const WORKOUT_DATA = {"workouts":[{"phase":1,"week":1,"day":1,"title":"Day 1 Low
         }
       }
       
-      // Conditioning
-      if (sections['Conditioning'] || sections['Cond.']) {
-        const condExercises = sections['Conditioning'] || sections['Cond.'] || [];
-        if (condExercises.length > 0) {
-          cards.push({ type: 'conditioning', exercises: condExercises });
-        }
+      // Conditioning (look for conditioning section)
+      const condExercises = sections['Conditioning'] || sections['Cond.'] || [];
+      if (condExercises.length > 0) {
+        cards.push({ type: 'conditioning', exercises: condExercises });
       }
       
       totalCards = cards.length;
@@ -965,7 +989,7 @@ const WORKOUT_DATA = {"workouts":[{"phase":1,"week":1,"day":1,"title":"Day 1 Low
       updateCompletionIndicators();
       
       // Load PRs from Google Sheets if URL is configured
-      if (APPS_SCRIPT_URL !== 'YOUR_WEB_APP_URL_HERE') {
+      if (APPS_SCRIPT_URL !== https://script.google.com/macros/s/AKfycbyApO5TRokbe4YgdE-vnnAfO1SpDjrkmFf96bk_09PJjbeG30x211JrPQwaFQpCn4y-Qg/exec) {
         await loadPRsFromSheet();
       }
     });
