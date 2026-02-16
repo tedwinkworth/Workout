@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Swipeable Workout Cards - Phase 1 Day 1</title>
+  <title>Ted's Workout Tracker</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     * { 
@@ -15,6 +15,12 @@
       padding: 0; 
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
       overflow-x: hidden;
+    }
+    .screen {
+      display: none;
+    }
+    .screen.active {
+      display: block;
     }
     .card-container {
       position: relative;
@@ -46,501 +52,6 @@
       opacity: 0;
       pointer-events: none;
     }
-    .workout-card.hidden {
-      transform: translateX(100%);
-      opacity: 0;
-      pointer-events: none;
-    }
-  </style>
-</head>
-<body class="bg-zinc-950">
-  
-  <!-- Header -->
-  <div class="sticky top-0 bg-zinc-950/95 backdrop-blur-sm border-b border-zinc-800 z-50">
-    <div class="px-6 py-4">
-      <div class="flex items-center justify-between mb-3">
-        <button onclick="goBack()" class="text-zinc-400 text-sm">← Back</button>
-        <div class="text-right">
-          <p class="text-xs text-zinc-500">Week 1</p>
-          <p class="text-sm font-bold text-white">Day 1 - Lower Body</p>
-        </div>
-      </div>
-      
-      <!-- Progress Bar -->
-      <div class="flex items-center gap-2 mb-2">
-        <div class="flex-1 h-1.5 bg-zinc-800 rounded-full overflow-hidden">
-          <div id="progressBar" class="h-full bg-gradient-to-r from-orange-500 to-red-500 transition-all duration-300" style="width: 0%"></div>
-        </div>
-        <span id="progressText" class="text-xs text-zinc-500 font-bold">0/7</span>
-      </div>
-    </div>
-  </div>
-
-  <!-- Card Navigation Dots -->
-  <div class="flex justify-center gap-2 py-4">
-    <div class="dot active" data-index="0"></div>
-    <div class="dot" data-index="1"></div>
-    <div class="dot" data-index="2"></div>
-    <div class="dot" data-index="3"></div>
-    <div class="dot" data-index="4"></div>
-    <div class="dot" data-index="5"></div>
-    <div class="dot" data-index="6"></div>
-  </div>
-
-  <!-- Swipeable Cards Container -->
-  <div class="card-container">
-    
-    <!-- CARD 1: WARMUP -->
-    <div class="workout-card active" data-card="0">
-      <div class="bg-zinc-900/50 border border-zinc-800 rounded-2xl p-6">
-        <div class="flex items-center gap-2 mb-4">
-          <div class="w-2 h-2 bg-blue-400 rounded-full"></div>
-          <h2 class="text-lg font-black text-white uppercase tracking-wide">Warmup</h2>
-        </div>
-        
-        <div class="space-y-3 mb-4">
-          <div class="bg-zinc-950/50 rounded-lg p-3">
-            <div class="flex justify-between items-center mb-1">
-              <span class="text-white font-semibold">Sled drag/push</span>
-              <span class="text-zinc-400 text-sm">1 × 5 min</span>
-            </div>
-            <a href="https://youtu.be/YO9TDb8RKsE" target="_blank" class="text-blue-400 text-xs flex items-center gap-1 hover:text-blue-300">
-              <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M10 16.5l6-4.5-6-4.5v9zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/></svg>
-              Form video
-            </a>
-          </div>
-          
-          <div class="bg-zinc-950/50 rounded-lg p-3">
-            <div class="flex justify-between items-center mb-1">
-              <span class="text-white font-semibold">Hip Airplane</span>
-              <span class="text-zinc-400 text-sm">2 × 5 e.s.</span>
-            </div>
-            <a href="https://youtu.be/2hIL15iGuNA" target="_blank" class="text-blue-400 text-xs flex items-center gap-1 hover:text-blue-300">
-              <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M10 16.5l6-4.5-6-4.5v9zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/></svg>
-              Form video
-            </a>
-          </div>
-          
-          <div class="bg-zinc-950/50 rounded-lg p-3">
-            <div class="flex justify-between items-center mb-1">
-              <span class="text-white font-semibold">Hanging Leg Raise</span>
-              <span class="text-zinc-400 text-sm">2 × 10</span>
-            </div>
-            <a href="https://youtu.be/7FwGZ8qY5OU" target="_blank" class="text-blue-400 text-xs flex items-center gap-1 hover:text-blue-300">
-              <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M10 16.5l6-4.5-6-4.5v9zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/></svg>
-              Form video
-            </a>
-          </div>
-          
-          <div class="bg-zinc-950/50 rounded-lg p-3">
-            <div class="flex justify-between items-center mb-1">
-              <span class="text-white font-semibold">Suitcase Carry</span>
-              <span class="text-zinc-400 text-sm">2 × 10 yds e.s.</span>
-            </div>
-            <a href="https://youtu.be/bAnCoDrvXc4" target="_blank" class="text-blue-400 text-xs flex items-center gap-1 hover:text-blue-300">
-              <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M10 16.5l6-4.5-6-4.5v9zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/></svg>
-              Form video
-            </a>
-          </div>
-        </div>
-        
-        <!-- Complete Button -->
-        <button onclick="markCompleteAndNext(0)" class="w-full bg-gradient-to-r from-green-600 to-green-500 hover:from-green-500 hover:to-green-400 text-white px-6 py-4 rounded-xl font-black text-lg transition-all flex items-center justify-center gap-2" id="complete-btn-0">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <polyline points="20 6 9 17 4 12" stroke-width="3"/>
-          </svg>
-          Mark Complete
-        </button>
-      </div>
-    </div>
-
-    <!-- CARD 2: PLYOS -->
-    <div class="workout-card next" data-card="1">
-      <div class="bg-zinc-900/50 border border-zinc-800 rounded-2xl p-6">
-        <div class="flex items-center gap-2 mb-4">
-          <div class="w-2 h-2 bg-purple-400 rounded-full"></div>
-          <h2 class="text-lg font-black text-white uppercase tracking-wide">Plyometrics</h2>
-          <span class="ml-auto text-xs text-purple-400 bg-purple-500/20 px-2 py-1 rounded">SUPERSET</span>
-        </div>
-        
-        <div class="space-y-4 mb-4">
-          <div class="bg-zinc-950/50 rounded-xl p-4">
-            <div class="flex justify-between items-start mb-2">
-              <span class="text-white font-bold">Seated Box Jump</span>
-              <span class="text-orange-400 font-bold text-sm">3 × 3</span>
-            </div>
-            <a href="https://youtu.be/64OAo8kINPQ" target="_blank" class="text-blue-400 text-xs flex items-center gap-1 hover:text-blue-300">
-              <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M10 16.5l6-4.5-6-4.5v9zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/></svg>
-              Watch form video
-            </a>
-          </div>
-          
-          <div class="bg-zinc-950/50 rounded-xl p-4">
-            <div class="flex justify-between items-start mb-2">
-              <span class="text-white font-bold">Approach Jump</span>
-              <span class="text-orange-400 font-bold text-sm">3 × 3 e.s.</span>
-            </div>
-            <a href="https://youtu.be/YO9TDb8RKsE" target="_blank" class="text-blue-400 text-xs flex items-center gap-1 hover:text-blue-300">
-              <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M10 16.5l6-4.5-6-4.5v9zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/></svg>
-              Watch form video
-            </a>
-          </div>
-        </div>
-        
-        <!-- Complete Button -->
-        <button onclick="markCompleteAndNext(1)" class="w-full bg-gradient-to-r from-green-600 to-green-500 hover:from-green-500 hover:to-green-400 text-white px-6 py-4 rounded-xl font-black text-lg transition-all flex items-center justify-center gap-2" id="complete-btn-1">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <polyline points="20 6 9 17 4 12" stroke-width="3"/>
-          </svg>
-          Mark Complete
-        </button>
-      </div>
-    </div>
-
-    <!-- CARD 3: BACK SQUAT -->
-    <div class="workout-card hidden" data-card="2">
-      <div class="bg-gradient-to-br from-orange-900/20 to-red-900/20 border border-orange-800/50 rounded-2xl p-6 overflow-y-auto max-h-[calc(100vh-250px)]">
-        <div class="flex items-center gap-2 mb-4">
-          <div class="w-2 h-2 bg-orange-400 rounded-full"></div>
-          <h2 class="text-lg font-black text-white uppercase tracking-wide">Main Lift 1</h2>
-          <span class="ml-auto text-xs text-orange-400 bg-orange-500/20 px-2 py-1 rounded">PRIMARY</span>
-        </div>
-        
-        <h3 class="text-2xl font-black text-white mb-3">Back Squat</h3>
-        
-        <a href="https://youtu.be/j-KDHkRMer0" target="_blank" class="text-blue-400 text-sm flex items-center gap-1 hover:text-blue-300 mb-4">
-          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M10 16.5l6-4.5-6-4.5v9zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/></svg>
-          Watch form video
-        </a>
-        
-        <!-- Warmup Sets -->
-        <div class="bg-zinc-950/50 rounded-xl p-3 mb-3">
-          <p class="text-xs text-zinc-500 uppercase tracking-wide mb-1">Warmup</p>
-          <div class="flex items-center justify-between">
-            <span class="text-white font-semibold text-sm">2 × 5</span>
-            <span class="text-zinc-400 text-xs">@ 5-6 RIR</span>
-          </div>
-        </div>
-        
-        <!-- Working Sets -->
-        <div class="bg-zinc-950/50 rounded-xl p-3 mb-3">
-          <p class="text-xs text-zinc-500 uppercase tracking-wide mb-2">Working Sets</p>
-          <div class="space-y-1">
-            <div class="flex items-center justify-between">
-              <span class="text-orange-400 font-bold text-sm">1 × 5</span>
-              <span class="text-orange-400 text-xs">@ 1 RIR</span>
-            </div>
-            <div class="flex items-center justify-between">
-              <span class="text-orange-400 font-bold text-sm">3 × 8</span>
-              <span class="text-orange-400 text-xs">@ 2-3 RIR (drop 20%)</span>
-            </div>
-          </div>
-          <p class="text-xs text-zinc-600 mt-2 italic">Work up to heavy 5</p>
-        </div>
-        
-        <!-- Weight Input -->
-        <div class="mb-3">
-          <label class="block text-xs text-zinc-400 uppercase tracking-wide mb-1">Weight (lbs)</label>
-          <input type="number" placeholder="185" class="w-full bg-zinc-900 border border-zinc-700 rounded-lg px-3 py-2 text-white text-lg font-bold">
-        </div>
-        
-        <!-- Notes -->
-        <div class="mb-3">
-          <label class="block text-xs text-zinc-400 uppercase tracking-wide mb-1">Notes</label>
-          <input type="text" placeholder="How did it feel?" class="w-full bg-zinc-900 border border-zinc-700 rounded-lg px-3 py-2 text-white text-sm">
-        </div>
-        
-        <!-- PR Display -->
-        <div class="bg-green-900/20 border border-green-800/50 rounded-xl p-3 mb-3">
-          <div class="flex items-center justify-between mb-1">
-            <span class="text-xs text-green-400 uppercase tracking-wide">PR</span>
-            <span class="text-xl font-black text-green-400">225 lbs</span>
-          </div>
-          <p class="text-xs text-zinc-500">2/8/26 • MC1 W3</p>
-        </div>
-        
-        <!-- Mini Chart -->
-        <div class="bg-zinc-950/50 rounded-xl p-3 mb-4">
-          <p class="text-xs text-zinc-500 uppercase tracking-wide mb-2">Progress</p>
-          <div class="flex items-end justify-between h-16 gap-1">
-            <div class="flex-1 flex flex-col justify-end">
-              <div class="bg-gradient-to-t from-orange-500 to-red-500 rounded-t" style="height: 60%"></div>
-            </div>
-            <div class="flex-1 flex flex-col justify-end">
-              <div class="bg-gradient-to-t from-orange-500 to-red-500 rounded-t" style="height: 75%"></div>
-            </div>
-            <div class="flex-1 flex flex-col justify-end">
-              <div class="bg-gradient-to-t from-orange-500 to-red-500 rounded-t" style="height: 85%"></div>
-            </div>
-            <div class="flex-1 flex flex-col justify-end">
-              <div class="bg-gradient-to-t from-orange-500 to-red-500 rounded-t" style="height: 95%"></div>
-            </div>
-            <div class="flex-1 flex flex-col justify-end">
-              <div class="bg-gradient-to-t from-orange-500 to-red-500 rounded-t" style="height: 100%"></div>
-            </div>
-          </div>
-        </div>
-        
-        <!-- Complete Button -->
-        <button onclick="markCompleteAndNext(2)" class="w-full bg-gradient-to-r from-green-600 to-green-500 hover:from-green-500 hover:to-green-400 text-white px-6 py-4 rounded-xl font-black text-lg transition-all flex items-center justify-center gap-2" id="complete-btn-2">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <polyline points="20 6 9 17 4 12" stroke-width="3"/>
-          </svg>
-          Mark Complete
-        </button>
-      </div>
-    </div>
-
-    <!-- CARD 4: B-STANCE RDL -->
-    <div class="workout-card hidden" data-card="3">
-      <div class="bg-gradient-to-br from-orange-900/20 to-red-900/20 border border-orange-800/50 rounded-2xl p-6 overflow-y-auto max-h-[calc(100vh-250px)]">
-        <div class="flex items-center gap-2 mb-4">
-          <div class="w-2 h-2 bg-orange-400 rounded-full"></div>
-          <h2 class="text-lg font-black text-white uppercase tracking-wide">Main Lift 2</h2>
-          <span class="ml-auto text-xs text-orange-400 bg-orange-500/20 px-2 py-1 rounded">PRIMARY</span>
-        </div>
-        
-        <h3 class="text-2xl font-black text-white mb-3">B-Stance RDL</h3>
-        
-        <a href="https://youtu.be/geLox27yGwM" target="_blank" class="text-blue-400 text-sm flex items-center gap-1 hover:text-blue-300 mb-4">
-          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M10 16.5l6-4.5-6-4.5v9zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/></svg>
-          Watch form video
-        </a>
-        
-        <div class="bg-zinc-950/50 rounded-xl p-3 mb-3">
-          <p class="text-xs text-zinc-500 uppercase tracking-wide mb-1">Warmup</p>
-          <span class="text-white font-semibold text-sm">1 × 5 @ 5-6 RIR</span>
-        </div>
-        
-        <div class="bg-zinc-950/50 rounded-xl p-3 mb-3">
-          <p class="text-xs text-zinc-500 uppercase tracking-wide mb-1">Working Sets</p>
-          <span class="text-orange-400 font-bold text-sm">4 × 6 e.s. @ 2 RIR</span>
-        </div>
-        
-        <div class="mb-3">
-          <label class="block text-xs text-zinc-400 uppercase mb-1">Weight (lbs)</label>
-          <input type="number" placeholder="50" class="w-full bg-zinc-900 border border-zinc-700 rounded-lg px-3 py-2 text-white text-lg font-bold">
-        </div>
-        
-        <div class="mb-3">
-          <label class="block text-xs text-zinc-400 uppercase mb-1">Notes</label>
-          <input type="text" placeholder="How did it feel?" class="w-full bg-zinc-900 border border-zinc-700 rounded-lg px-3 py-2 text-white text-sm">
-        </div>
-        
-        <div class="bg-green-900/20 border border-green-800/50 rounded-xl p-3 mb-3">
-          <div class="flex items-center justify-between mb-1">
-            <span class="text-xs text-green-400 uppercase">PR</span>
-            <span class="text-xl font-black text-green-400">165 lbs</span>
-          </div>
-          <p class="text-xs text-zinc-500">2/12/26 • MC1 W3</p>
-        </div>
-        
-        <div class="bg-zinc-950/50 rounded-xl p-3 mb-4">
-          <p class="text-xs text-zinc-500 uppercase mb-2">Progress</p>
-          <div class="flex items-end justify-between h-16 gap-1">
-            <div class="flex-1 flex flex-col justify-end"><div class="bg-gradient-to-t from-orange-500 to-red-500 rounded-t" style="height: 55%"></div></div>
-            <div class="flex-1 flex flex-col justify-end"><div class="bg-gradient-to-t from-orange-500 to-red-500 rounded-t" style="height: 70%"></div></div>
-            <div class="flex-1 flex flex-col justify-end"><div class="bg-gradient-to-t from-orange-500 to-red-500 rounded-t" style="height: 85%"></div></div>
-            <div class="flex-1 flex flex-col justify-end"><div class="bg-gradient-to-t from-orange-500 to-red-500 rounded-t" style="height: 95%"></div></div>
-            <div class="flex-1 flex flex-col justify-end"><div class="bg-gradient-to-t from-orange-500 to-red-500 rounded-t" style="height: 100%"></div></div>
-          </div>
-        </div>
-        
-        <!-- Complete Button -->
-        <button onclick="markCompleteAndNext(3)" class="w-full bg-gradient-to-r from-green-600 to-green-500 hover:from-green-500 hover:to-green-400 text-white px-6 py-4 rounded-xl font-black text-lg transition-all flex items-center justify-center gap-2" id="complete-btn-3">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <polyline points="20 6 9 17 4 12" stroke-width="3"/>
-          </svg>
-          Mark Complete
-        </button>
-      </div>
-    </div>
-
-    <!-- CARD 5: TRISET 1 -->
-    <div class="workout-card hidden" data-card="4">
-      <div class="bg-zinc-900/50 border border-zinc-800 rounded-2xl p-6 overflow-y-auto max-h-[calc(100vh-250px)]">
-        <div class="flex items-center gap-2 mb-4">
-          <div class="w-2 h-2 bg-cyan-400 rounded-full"></div>
-          <h2 class="text-lg font-black text-white uppercase tracking-wide">Triset 1</h2>
-          <span class="ml-auto text-xs text-cyan-400 bg-cyan-500/20 px-2 py-1 rounded">3 EXERCISES</span>
-        </div>
-        
-        <div class="space-y-3 mb-4">
-          <div class="bg-zinc-950/50 rounded-xl p-3">
-            <div class="flex justify-between items-start mb-2">
-              <h4 class="text-white font-bold text-sm">Walking Lunge</h4>
-              <span class="text-orange-400 font-bold text-xs">3 × 8 e.s.</span>
-            </div>
-            <a href="https://youtu.be/mAgbXQdd4LM" target="_blank" class="text-blue-400 text-xs flex items-center gap-1 hover:text-blue-300 mb-2">
-              <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M10 16.5l6-4.5-6-4.5v9zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/></svg>
-              Form video
-            </a>
-            <input type="number" placeholder="Weight" class="w-full bg-zinc-900 border border-zinc-700 rounded px-2 py-1 text-white text-sm mb-1">
-            <input type="text" placeholder="Notes" class="w-full bg-zinc-900 border border-zinc-700 rounded px-2 py-1 text-white text-xs">
-            <div class="flex items-center justify-between text-xs mt-1">
-              <span class="text-zinc-600">PR:</span>
-              <span class="text-green-400 font-bold">65 lbs</span>
-            </div>
-          </div>
-          
-          <div class="bg-zinc-950/50 rounded-xl p-3">
-            <div class="flex justify-between items-start mb-2">
-              <h4 class="text-white font-bold text-sm">Pull Up</h4>
-              <span class="text-orange-400 font-bold text-xs">3 × 5</span>
-            </div>
-            <a href="https://youtu.be/jgFel4wZl3I" target="_blank" class="text-blue-400 text-xs flex items-center gap-1 hover:text-blue-300 mb-2">
-              <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M10 16.5l6-4.5-6-4.5v9zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/></svg>
-              Form video
-            </a>
-            <input type="number" placeholder="Weight" class="w-full bg-zinc-900 border border-zinc-700 rounded px-2 py-1 text-white text-sm mb-1">
-            <input type="text" placeholder="Notes" class="w-full bg-zinc-900 border border-zinc-700 rounded px-2 py-1 text-white text-xs">
-            <div class="flex items-center justify-between text-xs mt-1">
-              <span class="text-zinc-600">PR:</span>
-              <span class="text-green-400 font-bold">BW +25</span>
-            </div>
-          </div>
-          
-          <div class="bg-zinc-950/50 rounded-xl p-3">
-            <div class="flex justify-between items-start mb-2">
-              <h4 class="text-white font-bold text-sm">KB Swings</h4>
-              <span class="text-orange-400 font-bold text-xs">3 × 20</span>
-            </div>
-            <a href="https://youtu.be/8C56NDNZ1i4" target="_blank" class="text-blue-400 text-xs flex items-center gap-1 hover:text-blue-300 mb-2">
-              <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M10 16.5l6-4.5-6-4.5v9zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/></svg>
-              Form video
-            </a>
-            <input type="number" placeholder="Weight" class="w-full bg-zinc-900 border border-zinc-700 rounded px-2 py-1 text-white text-sm mb-1">
-            <input type="text" placeholder="Notes" class="w-full bg-zinc-900 border border-zinc-700 rounded px-2 py-1 text-white text-xs">
-            <div class="flex items-center justify-between text-xs mt-1">
-              <span class="text-zinc-600">PR:</span>
-              <span class="text-green-400 font-bold">53 lbs</span>
-            </div>
-          </div>
-        </div>
-        
-        <div class="mb-4 pt-3 border-t border-zinc-800">
-          <p class="text-xs text-zinc-500">Rest: 1-2 min after • 10-30s between</p>
-        </div>
-        
-        <!-- Complete Button -->
-        <button onclick="markCompleteAndNext(4)" class="w-full bg-gradient-to-r from-green-600 to-green-500 hover:from-green-500 hover:to-green-400 text-white px-6 py-4 rounded-xl font-black text-lg transition-all flex items-center justify-center gap-2" id="complete-btn-4">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <polyline points="20 6 9 17 4 12" stroke-width="3"/>
-          </svg>
-          Mark Complete
-        </button>
-      </div>
-    </div>
-
-    <!-- CARD 6: TRISET 2 -->
-    <div class="workout-card hidden" data-card="5">
-      <div class="bg-zinc-900/50 border border-zinc-800 rounded-2xl p-6 overflow-y-auto max-h-[calc(100vh-250px)]">
-        <div class="flex items-center gap-2 mb-4">
-          <div class="w-2 h-2 bg-cyan-400 rounded-full"></div>
-          <h2 class="text-lg font-black text-white uppercase tracking-wide">Triset 2</h2>
-          <span class="ml-auto text-xs text-cyan-400 bg-cyan-500/20 px-2 py-1 rounded">3 EXERCISES</span>
-        </div>
-        
-        <div class="space-y-3 mb-4">
-          <div class="bg-zinc-950/50 rounded-xl p-3">
-            <div class="flex justify-between items-start mb-2">
-              <h4 class="text-white font-bold text-sm">V-ups</h4>
-              <span class="text-orange-400 font-bold text-xs">3 × 8</span>
-            </div>
-            <a href="https://youtu.be/dFVjNxRREKk" target="_blank" class="text-blue-400 text-xs flex items-center gap-1 hover:text-blue-300 mb-2">
-              <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M10 16.5l6-4.5-6-4.5v9zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/></svg>
-              Form video
-            </a>
-            <input type="text" placeholder="Notes" class="w-full bg-zinc-900 border border-zinc-700 rounded px-2 py-1 text-white text-xs">
-          </div>
-          
-          <div class="bg-zinc-950/50 rounded-xl p-3">
-            <div class="flex justify-between items-start mb-2">
-              <h4 class="text-white font-bold text-sm">Cossack Squat</h4>
-              <span class="text-orange-400 font-bold text-xs">3 × 8 e.s.</span>
-            </div>
-            <a href="https://youtu.be/rSaWYv37zzE" target="_blank" class="text-blue-400 text-xs flex items-center gap-1 hover:text-blue-300 mb-2">
-              <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M10 16.5l6-4.5-6-4.5v9zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/></svg>
-              Form video
-            </a>
-            <input type="number" placeholder="Weight" class="w-full bg-zinc-900 border border-zinc-700 rounded px-2 py-1 text-white text-sm mb-1">
-            <input type="text" placeholder="Notes" class="w-full bg-zinc-900 border border-zinc-700 rounded px-2 py-1 text-white text-xs">
-          </div>
-          
-          <div class="bg-zinc-950/50 rounded-xl p-3">
-            <div class="flex justify-between items-start mb-2">
-              <h4 class="text-white font-bold text-sm">Split Squat Iso</h4>
-              <span class="text-orange-400 font-bold text-xs">3 × 30 sec</span>
-            </div>
-            <a href="https://youtu.be/MPaJ7-EgV9E" target="_blank" class="text-blue-400 text-xs flex items-center gap-1 hover:text-blue-300 mb-2">
-              <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M10 16.5l6-4.5-6-4.5v9zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/></svg>
-              Form video
-            </a>
-            <input type="number" placeholder="Weight" class="w-full bg-zinc-900 border border-zinc-700 rounded px-2 py-1 text-white text-sm mb-1">
-            <input type="text" placeholder="Notes" class="w-full bg-zinc-900 border border-zinc-700 rounded px-2 py-1 text-white text-xs mb-1">
-            <p class="text-xs text-zinc-600 italic">Use weight if possible</p>
-          </div>
-        </div>
-        
-        <div class="mb-4 pt-3 border-t border-zinc-800">
-          <p class="text-xs text-zinc-500">Rest: 1 min after • 10-30s between</p>
-        </div>
-        
-        <!-- Complete Button -->
-        <button onclick="markCompleteAndNext(5)" class="w-full bg-gradient-to-r from-green-600 to-green-500 hover:from-green-500 hover:to-green-400 text-white px-6 py-4 rounded-xl font-black text-lg transition-all flex items-center justify-center gap-2" id="complete-btn-5">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <polyline points="20 6 9 17 4 12" stroke-width="3"/>
-          </svg>
-          Mark Complete
-        </button>
-      </div>
-    </div>
-
-    <!-- CARD 7: CONDITIONING -->
-    <div class="workout-card hidden" data-card="6">
-      <div class="bg-gradient-to-br from-red-900/20 to-orange-900/20 border border-red-800/50 rounded-2xl p-6">
-        <div class="flex items-center gap-2 mb-4">
-          <div class="w-2 h-2 bg-red-400 rounded-full"></div>
-          <h2 class="text-lg font-black text-white uppercase tracking-wide">Conditioning</h2>
-          <span class="ml-auto text-xs text-red-400 bg-red-500/20 px-2 py-1 rounded">FINISHER</span>
-        </div>
-        
-        <div class="bg-zinc-950/50 rounded-xl p-4 mb-4">
-          <h4 class="text-white font-bold mb-3">Air Bike or Sled</h4>
-          <div class="flex items-center justify-between mb-3">
-            <span class="text-orange-400 font-bold">10 × 30 sec</span>
-            <span class="text-red-400 text-sm font-semibold">HARD</span>
-          </div>
-          <input type="text" placeholder="Notes" class="w-full bg-zinc-900 border border-zinc-700 rounded-lg px-3 py-2 text-white text-sm mb-2">
-          <p class="text-xs text-zinc-600">Rest: 30 sec between intervals</p>
-        </div>
-        
-        <!-- Complete Button -->
-        <button onclick="markCompleteAndNext(6)" class="w-full bg-gradient-to-r from-green-600 to-green-500 hover:from-green-500 hover:to-green-400 text-white px-6 py-4 rounded-xl font-black text-lg transition-all flex items-center justify-center gap-2" id="complete-btn-6">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <polyline points="20 6 9 17 4 12" stroke-width="3"/>
-          </svg>
-          Mark Complete
-        </button>
-      </div>
-    </div>
-
-  </div>
-
-  <!-- Bottom Navigation -->
-  <div class="fixed bottom-0 left-0 right-0 bg-zinc-950/95 backdrop-blur-sm border-t border-zinc-800 p-6">
-    <div class="flex items-center justify-between max-w-lg mx-auto">
-      <button onclick="prevCard()" id="prevBtn" class="px-6 py-3 bg-zinc-800 text-white rounded-xl font-bold disabled:opacity-50 disabled:cursor-not-allowed">
-        ← Previous
-      </button>
-      
-      <button onclick="nextCard()" id="nextBtn" class="px-6 py-3 bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-xl font-bold">
-        Next →
-      </button>
-    </div>
-  </div>
-
-  <style>
     .dot {
       width: 8px;
       height: 8px;
@@ -557,17 +68,502 @@
       background: #22c55e;
     }
   </style>
+</head>
+<body class="bg-zinc-950">
 
+  <!-- HOME SCREEN -->
+  <div id="home-screen" class="screen active min-h-screen p-6">
+    <div class="max-w-md mx-auto">
+      <div class="text-center mb-8 pt-8">
+        <h1 class="text-4xl font-black text-white mb-2">💪 Workout Tracker</h1>
+        <p class="text-zinc-400">12-Week Strength Program</p>
+      </div>
+      
+      <div class="space-y-4">
+        <button onclick="selectPhase(1)" class="w-full bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-500 hover:to-red-500 text-white p-6 rounded-2xl transition-all">
+          <h3 class="text-2xl font-black mb-1">Phase 1</h3>
+          <p class="text-sm opacity-90">Weeks 1-3 • 9 Workouts</p>
+          <p class="text-xs opacity-75 mt-2">Intro Phase</p>
+        </button>
+        
+        <button onclick="selectPhase(2)" class="w-full bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white p-6 rounded-2xl transition-all">
+          <h3 class="text-2xl font-black mb-1">Phase 2</h3>
+          <p class="text-sm opacity-90">Weeks 4-7 • 12 Workouts</p>
+          <p class="text-xs opacity-75 mt-2">Build Phase</p>
+        </button>
+        
+        <button onclick="selectPhase(3)" class="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white p-6 rounded-2xl transition-all">
+          <h3 class="text-2xl font-black mb-1">Phase 3</h3>
+          <p class="text-sm opacity-90">Weeks 8-11 • 12 Workouts</p>
+          <p class="text-xs opacity-75 mt-2">Peak Phase</p>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PHASE SCREEN -->
+  <div id="phase-screen" class="screen min-h-screen p-6">
+    <div class="max-w-md mx-auto">
+      <button onclick="showHome()" class="text-zinc-400 text-sm mb-4">← Back to Phases</button>
+      
+      <div class="text-center mb-8">
+        <h2 id="phase-title" class="text-3xl font-black text-white mb-2"></h2>
+        <p id="phase-subtitle" class="text-zinc-400"></p>
+      </div>
+      
+      <div id="weeks-container" class="space-y-3">
+        <!-- Weeks will be inserted here -->
+      </div>
+    </div>
+  </div>
+
+  <!-- WEEK SCREEN -->
+  <div id="week-screen" class="screen min-h-screen p-6">
+    <div class="max-w-md mx-auto">
+      <button onclick="showPhaseScreen()" class="text-zinc-400 text-sm mb-4">← Back to Weeks</button>
+      
+      <div class="text-center mb-8">
+        <h2 id="week-title" class="text-3xl font-black text-white mb-2"></h2>
+        <p id="week-subtitle" class="text-zinc-400"></p>
+      </div>
+      
+      <div class="space-y-3">
+        <button onclick="selectDay(1)" class="w-full bg-zinc-900 border-2 border-zinc-800 hover:border-orange-500 text-white p-5 rounded-xl transition-all text-left">
+          <div class="flex items-center justify-between">
+            <div>
+              <h3 class="text-xl font-bold">Day 1</h3>
+              <p class="text-sm text-zinc-400">Lower Body Focus</p>
+            </div>
+            <svg class="w-6 h-6 text-zinc-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+            </svg>
+          </div>
+        </button>
+        
+        <button onclick="selectDay(2)" class="w-full bg-zinc-900 border-2 border-zinc-800 hover:border-orange-500 text-white p-5 rounded-xl transition-all text-left">
+          <div class="flex items-center justify-between">
+            <div>
+              <h3 class="text-xl font-bold">Day 2</h3>
+              <p class="text-sm text-zinc-400">Upper Body Focus</p>
+            </div>
+            <svg class="w-6 h-6 text-zinc-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+            </svg>
+          </div>
+        </button>
+        
+        <button onclick="selectDay(3)" class="w-full bg-zinc-900 border-2 border-zinc-800 hover:border-orange-500 text-white p-5 rounded-xl transition-all text-left">
+          <div class="flex items-center justify-between">
+            <div>
+              <h3 class="text-xl font-bold">Day 3</h3>
+              <p class="text-sm text-zinc-400">Full Body / Conditioning</p>
+            </div>
+            <svg class="w-6 h-6 text-zinc-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+            </svg>
+          </div>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- WORKOUT SCREEN -->
+  <div id="workout-screen" class="screen">
+    <!-- Header -->
+    <div class="sticky top-0 bg-zinc-950/95 backdrop-blur-sm border-b border-zinc-800 z-50">
+      <div class="px-6 py-4">
+        <div class="flex items-center justify-between mb-3">
+          <button onclick="showWeekScreen()" class="text-zinc-400 text-sm">← Back</button>
+          <div class="text-right">
+            <p id="workout-phase-week" class="text-xs text-zinc-500"></p>
+            <p id="workout-title" class="text-sm font-bold text-white"></p>
+          </div>
+        </div>
+        
+        <!-- Progress Bar -->
+        <div class="flex items-center gap-2 mb-2">
+          <div class="flex-1 h-1.5 bg-zinc-800 rounded-full overflow-hidden">
+            <div id="progressBar" class="h-full bg-gradient-to-r from-orange-500 to-red-500 transition-all duration-300" style="width: 0%"></div>
+          </div>
+          <span id="progressText" class="text-xs text-zinc-500 font-bold">0/7</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card Navigation Dots -->
+    <div id="dots-container" class="flex justify-center gap-2 py-4">
+      <!-- Dots will be inserted dynamically -->
+    </div>
+
+    <!-- Cards Container -->
+    <div id="cards-container" class="card-container">
+      <!-- Workout cards will be inserted here dynamically -->
+    </div>
+
+    <!-- Bottom Navigation -->
+    <div class="fixed bottom-0 left-0 right-0 bg-zinc-950/95 backdrop-blur-sm border-t border-zinc-800 p-6">
+      <div class="flex items-center justify-between max-w-lg mx-auto">
+        <button onclick="prevCard()" id="prevBtn" class="px-6 py-3 bg-zinc-800 text-white rounded-xl font-bold disabled:opacity-50 disabled:cursor-not-allowed">
+          ← Previous
+        </button>
+        
+        <button onclick="nextCard()" id="nextBtn" class="px-6 py-3 bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-xl font-bold">
+          Next →
+        </button>
+      </div>
+    </div>
+  </div>
+
+
+<script>
+// Embedded workout data
+const WORKOUT_DATA = {"workouts":[{"phase":1,"week":1,"day":1,"title":"Day 1 Lower body focus","exercises":[{"name":"Warm up","section":"Main","warmup_sets":"Sled drag or push","warmup_reps":"","warmup_intensity":"","working_sets":"1","working_reps":"5minutes","working_intensity":"Moderate","weight":"N/A","rest":"","notes":""},{"name":"Hip Air Plane","section":"Main","warmup_sets":"2","warmup_reps":"5e.s.","warmup_intensity":"easy","working_sets":"2","working_reps":"5e.s.","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Hanging Leg raise","section":"Main","warmup_sets":"2","warmup_reps":"10","warmup_intensity":"easy","working_sets":"2","working_reps":"10","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Suitcase Carry","section":"Main","warmup_sets":"2","warmup_reps":"10 yards e.s.","warmup_intensity":"easy","working_sets":"2","working_reps":"10 e.s.","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Approach jump","section":"Super set","warmup_sets":"","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"3e.s.","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Back squat","section":"Super set","warmup_sets":"2","warmup_reps":"5","warmup_intensity":"5-6 (RIR)","working_sets":"1","working_reps":"5","working_intensity":"(1 RiR)","weight":"185","rest":"1-2 min.","notes":"work up to a heavy set of 5"},{"name":"B-Stance RDL","section":"Super set","warmup_sets":"1","warmup_reps":"5","warmup_intensity":"5-6 (RIR)","working_sets":"4","working_reps":"6e.s.","working_intensity":"(2 RiR)","weight":"50","rest":"1-2 min.","notes":""},{"name":"Pull Up","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"5","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Kettle Bell Swings","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"20","working_intensity":"","weight":"53","rest":"","notes":""},{"name":"Coassak Squat","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"8e.s.","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Split squat iso","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"30 sec","working_intensity":"","weight":"","rest":"","notes":"Use weight if possible"}]},{"phase":1,"week":1,"day":2,"title":"Day 2 Upper Body focus","exercises":[{"name":"Mobility Work: Cycle Through Ankles,  Hips, Shoulders, Wrists","section":"Main","warmup_sets":"General 5 min. warm-up on Rower or Treadmill","warmup_reps":"","warmup_intensity":"","working_sets":"1","working_reps":"5minutes","working_intensity":"Moderate","weight":"N/A","rest":"","notes":""},{"name":"Band Pull aparts","section":"Main","warmup_sets":"2","warmup_reps":"20","warmup_intensity":"easy","working_sets":"2","working_reps":"20","working_intensity":"","weight":"","rest":"N/A","notes":""},{"name":"Tricep press downs","section":"Main","warmup_sets":"2","warmup_reps":"5","warmup_intensity":"easy","working_sets":"2","working_reps":"20","working_intensity":"","weight":"","rest":"N/A","notes":""},{"name":"KB bottoms up press","section":"Main","warmup_sets":"2","warmup_reps":"5e.s.","warmup_intensity":"easy","working_sets":"2","working_reps":"5e.s.","working_intensity":"","weight":"","rest":"N/A","notes":""},{"name":"Med ball Chest pass","section":"Super set","warmup_sets":"","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"5","working_intensity":"","weight":"","rest":"N/A","notes":""},{"name":"Barbell Bench  (Dead Press)","section":"Super set","warmup_sets":"1","warmup_reps":"5","warmup_intensity":"5-6 (RIR)","working_sets":"1","working_reps":"5","working_intensity":"(1-2 RiR)","weight":"155","rest":"1-2 min.","notes":"Work up to a heavy set of 5"},{"name":"Lat Pulldown","section":"Super set","warmup_sets":"1","warmup_reps":"5","warmup_intensity":"5-6 (RIR)","working_sets":"4","working_reps":"10-12","working_intensity":"(1-2 RiR)","weight":"","rest":"1-2 min.","notes":""},{"name":"Chest supported row","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"10","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Boat Hold","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"30 seconds","working_intensity":"","weight":"","rest":"","notes":""},{"name":"DB Pullover","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"10","working_intensity":"","weight":"","rest":"","notes":""},{"name":"DB Alternating Bicep Curl","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"10e.s.","working_intensity":"","weight":"","rest":"","notes":""},{"name":"GHD Holds","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"30 seconds","working_intensity":"Hard","weight":"","rest":"30 seconds between rounds","notes":""}]},{"phase":1,"week":1,"day":3,"title":"Day 3 Hinge focus","exercises":[{"name":"Warm up","section":"Main","warmup_sets":"Sled drag or push","warmup_reps":"","warmup_intensity":"","working_sets":"1","working_reps":"5minutes","working_intensity":"Moderate","weight":"N/A","rest":"","notes":""},{"name":"Hip Air Plane","section":"Main","warmup_sets":"2","warmup_reps":"5e.s.","warmup_intensity":"easy","working_sets":"2","working_reps":"5e.s.","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Hanging Leg raise","section":"Main","warmup_sets":"2","warmup_reps":"10","warmup_intensity":"easy","working_sets":"2","working_reps":"5","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Suitcase Carry","section":"Main","warmup_sets":"2","warmup_reps":"10 yards e.s.","warmup_intensity":"easy","working_sets":"2","working_reps":"10yds","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Med Ball Slam","section":"Super set","warmup_sets":"","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"5","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Box Squat","section":"Super set","warmup_sets":"1","warmup_reps":"5","warmup_intensity":"5-6 (RIR)","working_sets":"8","working_reps":"3","working_intensity":"(1-2 RiR)","weight":"225","rest":"45 seconds","notes":"This should be about 70% of your estimated 1 rep max (was able to put up 225 but stopped at 1 rep)"},{"name":"Bench Press","section":"Super set","warmup_sets":"1","warmup_reps":"5","warmup_intensity":"5-6 (RIR)","working_sets":"8","working_reps":"3","working_intensity":"(1-2 RiR)","weight":"185","rest":"45 seconds","notes":"This should be about 70% of your estimated 1 rep max 225 wasn't done but feels actually possible as of 1/14. 1 rep max = 205"},{"name":"RDL","section":"Super set","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"4","working_reps":"8","working_intensity":"Moderate","weight":"145","rest":"1 minute","notes":""},{"name":"Seated Shoulder press DB","section":"Super set","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"8-10","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Cable Curl","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"15","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Farmer Carry","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"30 seconds","working_intensity":"","weight":"","rest":"","notes":"As heavy as possible"},{"name":"Rower","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"10","working_reps":"10 calories","working_intensity":"Hard","weight":"","rest":"30 sec.","notes":""}]},{"phase":1,"week":2,"day":1,"title":"Day 1 Lower body focus","exercises":[{"name":"Warm up","section":"Main","warmup_sets":"Sled drag or push","warmup_reps":"","warmup_intensity":"","working_sets":"1","working_reps":"5minutes","working_intensity":"Moderate","weight":"N/A","rest":"","notes":""},{"name":"Hip Air Plane","section":"Main","warmup_sets":"2","warmup_reps":"5e.s.","warmup_intensity":"easy","working_sets":"2","working_reps":"5e.s.","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Hanging Leg raise","section":"Main","warmup_sets":"2","warmup_reps":"10","warmup_intensity":"easy","working_sets":"2","working_reps":"10","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Suitcase Carry","section":"Main","warmup_sets":"2","warmup_reps":"10 yards e.s.","warmup_intensity":"easy","working_sets":"2","working_reps":"10 e.s.","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Approach jump","section":"Super set","warmup_sets":"","warmup_reps":"","warmup_intensity":"","working_sets":"4","working_reps":"3e.s.","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Back squat","section":"Super set","warmup_sets":"2","warmup_reps":"5","warmup_intensity":"5-6 (RIR)","working_sets":"1","working_reps":"5","working_intensity":"(1 RiR)","weight":"185","rest":"1-2 min.","notes":"work up to a heavy set of 5"},{"name":"B-Stance RDL","section":"Super set","warmup_sets":"1","warmup_reps":"5","warmup_intensity":"5-6 (RIR)","working_sets":"4","working_reps":"6e.s.","working_intensity":"(2 RiR)","weight":"","rest":"1-2 min.","notes":""},{"name":"Pull Up","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"5","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Kettle Bell Swings","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"20","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Coassak Squat","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"8e.s.","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Split squat iso","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"30 sec","working_intensity":"","weight":"","rest":"","notes":"Use weight if possible"}]},{"phase":1,"week":2,"day":2,"title":"Day 2 Upper Body focus","exercises":[{"name":"Mobility Work: Cycle Through Ankles,  Hips, Shoulders, Wrists","section":"Main","warmup_sets":"General 5 min. warm-up on Rower or Treadmill","warmup_reps":"","warmup_intensity":"","working_sets":"1","working_reps":"5minutes","working_intensity":"Moderate","weight":"N/A","rest":"","notes":""},{"name":"Band Pull aparts","section":"Main","warmup_sets":"2","warmup_reps":"20","warmup_intensity":"easy","working_sets":"2","working_reps":"20","working_intensity":"","weight":"","rest":"N/A","notes":""},{"name":"Tricep press downs","section":"Main","warmup_sets":"2","warmup_reps":"5","warmup_intensity":"easy","working_sets":"2","working_reps":"20","working_intensity":"","weight":"","rest":"N/A","notes":""},{"name":"KB bottoms up press","section":"Main","warmup_sets":"2","warmup_reps":"5e.s.","warmup_intensity":"easy","working_sets":"2","working_reps":"5e.s.","working_intensity":"","weight":"","rest":"N/A","notes":""},{"name":"Med ball Chest pass","section":"Super set","warmup_sets":"","warmup_reps":"","warmup_intensity":"","working_sets":"4","working_reps":"5","working_intensity":"","weight":"","rest":"N/A","notes":""},{"name":"Barbell Bench  (Dead Press)","section":"Super set","warmup_sets":"1","warmup_reps":"5","warmup_intensity":"5-6 (RIR)","working_sets":"1","working_reps":"5","working_intensity":"(1-2 RiR)","weight":"185","rest":"1-2 min.","notes":"Work up to a heavy set of 5"},{"name":"Lat Pulldown","section":"Super set","warmup_sets":"1","warmup_reps":"5","warmup_intensity":"5-6 (RIR)","working_sets":"4","working_reps":"10-12","working_intensity":"(1-2 RiR)","weight":"120","rest":"1-2 min.","notes":""},{"name":"Chest supported row","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"10","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Boat Hold","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"30 seconds","working_intensity":"","weight":"","rest":"","notes":""},{"name":"DB Pullover","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"10","working_intensity":"","weight":"35","rest":"","notes":""},{"name":"DB Alternating Bicep Curl","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"10e.s.","working_intensity":"","weight":"35","rest":"","notes":""},{"name":"GHD Holds","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"30 seconds","working_intensity":"Hard","weight":"","rest":"30 seconds between rounds","notes":""}]},{"phase":1,"week":2,"day":3,"title":"Day 3 Hinge focus","exercises":[{"name":"Warm up","section":"Main","warmup_sets":"Sled drag or push","warmup_reps":"","warmup_intensity":"","working_sets":"1","working_reps":"5minutes","working_intensity":"Moderate","weight":"N/A","rest":"","notes":""},{"name":"Hip Air Plane","section":"Main","warmup_sets":"2","warmup_reps":"5e.s.","warmup_intensity":"easy","working_sets":"2","working_reps":"5e.s.","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Hanging Leg raise","section":"Main","warmup_sets":"2","warmup_reps":"10","warmup_intensity":"easy","working_sets":"2","working_reps":"5","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Suitcase Carry","section":"Main","warmup_sets":"2","warmup_reps":"10 yards e.s.","warmup_intensity":"easy","working_sets":"2","working_reps":"10yds","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Med Ball Slam","section":"Super set","warmup_sets":"","warmup_reps":"","warmup_intensity":"","working_sets":"4","working_reps":"5","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Box Squat","section":"Super set","warmup_sets":"1","warmup_reps":"5","warmup_intensity":"5-6 (RIR)","working_sets":"10","working_reps":"3","working_intensity":"(1-2 RiR)","weight":"275","rest":"45 seconds","notes":"This should be about 70% of your estimated 1 rep max"},{"name":"Bench Press","section":"Super set","warmup_sets":"1","warmup_reps":"5","warmup_intensity":"5-6 (RIR)","working_sets":"10","working_reps":"3","working_intensity":"(1-2 RiR)","weight":"185","rest":"45 seconds","notes":"This should be about 70% of your estimated 1 rep max"},{"name":"RDL","section":"Super set","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"4","working_reps":"8","working_intensity":"Moderate","weight":"","rest":"1 minute","notes":"1/29/26 - only one set of 185. Rest at 155"},{"name":"Seated Shoulder press DB","section":"Super set","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"8-10","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Cable Curl","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"15","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Farmer Carry","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"30 seconds","working_intensity":"","weight":"","rest":"","notes":"As heavy as possible"},{"name":"Rower","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"10","working_reps":"10 calories","working_intensity":"Hard","weight":"","rest":"30 sec.","notes":""}]},{"phase":1,"week":3,"day":1,"title":"Day 1 Lower body focus","exercises":[{"name":"Warm up","section":"Main","warmup_sets":"Sled drag or push","warmup_reps":"","warmup_intensity":"","working_sets":"1","working_reps":"5minutes","working_intensity":"Moderate","weight":"N/A","rest":"","notes":""},{"name":"Hip Air Plane","section":"Main","warmup_sets":"2","warmup_reps":"5e.s.","warmup_intensity":"easy","working_sets":"2","working_reps":"5e.s.","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Hanging Leg raise","section":"Main","warmup_sets":"2","warmup_reps":"10","warmup_intensity":"easy","working_sets":"2","working_reps":"10","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Suitcase Carry","section":"Main","warmup_sets":"2","warmup_reps":"10 yards e.s.","warmup_intensity":"easy","working_sets":"2","working_reps":"10 e.s.","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Approach jump","section":"Super set","warmup_sets":"","warmup_reps":"","warmup_intensity":"","working_sets":"5","working_reps":"3e.s.","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Back squat","section":"Super set","warmup_sets":"2","warmup_reps":"5","warmup_intensity":"5-6 (RIR)","working_sets":"1","working_reps":"3","working_intensity":"(1 RiR)","weight":"185","rest":"1-2 min.","notes":"work up to a heavy set of 3"},{"name":"B-Stance RDL","section":"Super set","warmup_sets":"1","warmup_reps":"5","warmup_intensity":"5-6 (RIR)","working_sets":"4","working_reps":"6e.s.","working_intensity":"(2 RiR)","weight":"165","rest":"1-2 min.","notes":""},{"name":"Pull Up","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"5","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Kettle Bell Swings","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"20","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Coassak Squat","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"8e.s.","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Split squat iso","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"30 sec","working_intensity":"","weight":"","rest":"","notes":"Use weight if possible"}]},{"phase":1,"week":3,"day":2,"title":"Day 2 Upper Body focus","exercises":[{"name":"Mobility Work: Cycle Through Ankles,  Hips, Shoulders, Wrists","section":"Main","warmup_sets":"General 5 min. warm-up on Rower or Treadmill","warmup_reps":"","warmup_intensity":"","working_sets":"1","working_reps":"5minutes","working_intensity":"Moderate","weight":"N/A","rest":"","notes":""},{"name":"Band Pull aparts","section":"Main","warmup_sets":"2","warmup_reps":"20","warmup_intensity":"easy","working_sets":"2","working_reps":"20","working_intensity":"","weight":"","rest":"N/A","notes":""},{"name":"Tricep press downs","section":"Main","warmup_sets":"2","warmup_reps":"5","warmup_intensity":"easy","working_sets":"2","working_reps":"20","working_intensity":"","weight":"","rest":"N/A","notes":""},{"name":"KB bottoms up press","section":"Main","warmup_sets":"2","warmup_reps":"5e.s.","warmup_intensity":"easy","working_sets":"2","working_reps":"5e.s.","working_intensity":"","weight":"20","rest":"N/A","notes":""},{"name":"Med ball Chest pass","section":"Super set","warmup_sets":"","warmup_reps":"","warmup_intensity":"","working_sets":"5","working_reps":"5","working_intensity":"","weight":"","rest":"N/A","notes":""},{"name":"Barbell Bench  (Dead Press)","section":"Super set","warmup_sets":"1","warmup_reps":"5","warmup_intensity":"5-6 (RIR)","working_sets":"1","working_reps":"3","working_intensity":"(1-2 RiR)","weight":"185","rest":"1-2 min.","notes":"Only 2 @ 185 Feb 6"},{"name":"Lat Pulldown","section":"Super set","warmup_sets":"1","warmup_reps":"5","warmup_intensity":"5-6 (RIR)","working_sets":"4","working_reps":"10-12","working_intensity":"(1-2 RiR)","weight":"","rest":"1-2 min.","notes":""},{"name":"Chest supported row","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"10","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Boat Hold","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"30 seconds","working_intensity":"","weight":"","rest":"","notes":""},{"name":"DB Pullover","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"10","working_intensity":"","weight":"","rest":"","notes":""},{"name":"DB Alternating Bicep Curl","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"10e.s.","working_intensity":"","weight":"","rest":"","notes":""},{"name":"GHD Holds","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"30 seconds","working_intensity":"Hard","weight":"","rest":"30 seconds between rounds","notes":""}]},{"phase":1,"week":3,"day":3,"title":"Day 3 Hinge focus","exercises":[{"name":"Warm up","section":"Main","warmup_sets":"Sled drag or push","warmup_reps":"","warmup_intensity":"","working_sets":"1","working_reps":"5minutes","working_intensity":"Moderate","weight":"N/A","rest":"","notes":""},{"name":"Hip Air Plane","section":"Main","warmup_sets":"2","warmup_reps":"5e.s.","warmup_intensity":"easy","working_sets":"2","working_reps":"5e.s.","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Hanging Leg raise","section":"Main","warmup_sets":"2","warmup_reps":"10","warmup_intensity":"easy","working_sets":"2","working_reps":"5","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Suitcase Carry","section":"Main","warmup_sets":"2","warmup_reps":"10 yards e.s.","warmup_intensity":"easy","working_sets":"2","working_reps":"10yds","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Med Ball Slam","section":"Super set","warmup_sets":"","warmup_reps":"","warmup_intensity":"","working_sets":"5","working_reps":"5","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Box Squat","section":"Super set","warmup_sets":"1","warmup_reps":"5","warmup_intensity":"5-6 (RIR)","working_sets":"12","working_reps":"3","working_intensity":"(1-2 RiR)","weight":"285","rest":"45 seconds","notes":"This should be about 70% of your estimated 1 rep max"},{"name":"Bench Press","section":"Super set","warmup_sets":"1","warmup_reps":"5","warmup_intensity":"5-6 (RIR)","working_sets":"12","working_reps":"3","working_intensity":"(1-2 RiR)","weight":"185","rest":"45 seconds","notes":"This should be about 70% of your estimated 1 rep max"},{"name":"RDL","section":"Super set","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"4","working_reps":"8","working_intensity":"Moderate","weight":"","rest":"1 minute","notes":""},{"name":"Seated Shoulder press DB","section":"Super set","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"8-10","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Cable Curl","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"15","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Farmer Carry","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"30 seconds","working_intensity":"","weight":"","rest":"","notes":"As heavy as possible"},{"name":"Rower","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"10","working_reps":"10 calories","working_intensity":"Hard","weight":"","rest":"30 sec.","notes":""}]},{"phase":2,"week":1,"day":1,"title":"Day 1 Lower body focus","exercises":[{"name":"Warm up","section":"Main","warmup_sets":"Sled drag or push","warmup_reps":"","warmup_intensity":"","working_sets":"1","working_reps":"5minutes","working_intensity":"Moderate","weight":"N/A","rest":"","notes":""},{"name":"Hip Air Plane","section":"Main","warmup_sets":"2","warmup_reps":"5e.s.","warmup_intensity":"easy","working_sets":"2","working_reps":"5e.s.","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Hanging Leg raise","section":"Main","warmup_sets":"2","warmup_reps":"10","warmup_intensity":"easy","working_sets":"2","working_reps":"10","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Suitcase Carry","section":"Main","warmup_sets":"2","warmup_reps":"10 yards e.s.","warmup_intensity":"easy","working_sets":"2","working_reps":"10 e.s.","working_intensity":"","weight":"","rest":"","notes":""},{"name":"single leg pogo","section":"Super set","warmup_sets":"","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"30 e.s.","working_intensity":"","weight":"","rest":"","notes":""},{"name":"SSB Squat","section":"Super set","warmup_sets":"2","warmup_reps":"5","warmup_intensity":"5-6 (RIR)","working_sets":"1","working_reps":"5","working_intensity":"(1 RiR)","weight":"160","rest":"1-2 min.","notes":"work up to a heavy set of 5"},{"name":"SSB Goodmorning","section":"Super set","warmup_sets":"1","warmup_reps":"5","warmup_intensity":"5-6 (RIR)","working_sets":"4","working_reps":"6","working_intensity":"(2 RiR)","weight":"70","rest":"1-2 min.","notes":""},{"name":"GHD","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"5","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Inverted row","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"20","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Stir the pot","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"8e.s.","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Split squat iso","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"30 sec","working_intensity":"","weight":"","rest":"","notes":"Use weight if possible"}]},{"phase":2,"week":1,"day":2,"title":"Day 2 Upper Body focus","exercises":[{"name":"Mobility Work: Cycle Through Ankles,  Hips, Shoulders, Wrists","section":"Main","warmup_sets":"General 5 min. warm-up on Rower or Treadmill","warmup_reps":"","warmup_intensity":"","working_sets":"1","working_reps":"5minutes","working_intensity":"Moderate","weight":"N/A","rest":"","notes":""},{"name":"Band Pull aparts","section":"Main","warmup_sets":"2","warmup_reps":"20","warmup_intensity":"easy","working_sets":"2","working_reps":"20","working_intensity":"","weight":"","rest":"N/A","notes":""},{"name":"Tricep press downs","section":"Main","warmup_sets":"2","warmup_reps":"5","warmup_intensity":"easy","working_sets":"2","working_reps":"20","working_intensity":"","weight":"","rest":"N/A","notes":""},{"name":"KB bottoms up press","section":"Main","warmup_sets":"2","warmup_reps":"5e.s.","warmup_intensity":"easy","working_sets":"2","working_reps":"5e.s.","working_intensity":"","weight":"","rest":"N/A","notes":""},{"name":"Med ball rotational slam","section":"Super set","warmup_sets":"","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"5","working_intensity":"","weight":"","rest":"N/A","notes":""},{"name":"Barbell spoto press","section":"Super set","warmup_sets":"1","warmup_reps":"5","warmup_intensity":"5-6 (RIR)","working_sets":"1","working_reps":"5","working_intensity":"(1-2 RiR)","weight":"180","rest":"1-2 min.","notes":"Work up to a heavy set of 5"},{"name":"N.G. Pulldown","section":"Super set","warmup_sets":"1","warmup_reps":"5","warmup_intensity":"5-6 (RIR)","working_sets":"4","working_reps":"10-12","working_intensity":"(1-2 RiR)","weight":"120","rest":"1-2 min.","notes":""},{"name":"Chest supported row","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"10","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Boat Hold","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"30 seconds","working_intensity":"","weight":"","rest":"","notes":""},{"name":"DB Pullover","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"10","working_intensity":"","weight":"","rest":"","notes":""},{"name":"DB Alternating Bicep Curl","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"10e.s.","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Roll outs","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"30 seconds","working_intensity":"Hard","weight":"","rest":"30 seconds between rounds","notes":""}]},{"phase":2,"week":1,"day":3,"title":"Day 3 Hinge focus","exercises":[{"name":"Warm up","section":"Main","warmup_sets":"Sled drag or push","warmup_reps":"","warmup_intensity":"","working_sets":"1","working_reps":"5minutes","working_intensity":"Moderate","weight":"N/A","rest":"","notes":""},{"name":"Hip Air Plane","section":"Main","warmup_sets":"2","warmup_reps":"5e.s.","warmup_intensity":"easy","working_sets":"2","working_reps":"5e.s.","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Hanging Leg raise","section":"Main","warmup_sets":"2","warmup_reps":"10","warmup_intensity":"easy","working_sets":"2","working_reps":"5","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Suitcase Carry","section":"Main","warmup_sets":"2","warmup_reps":"10 yards e.s.","warmup_intensity":"easy","working_sets":"2","working_reps":"10yds","working_intensity":"","weight":"","rest":"","notes":""},{"name":"seated long jump","section":"Super set","warmup_sets":"","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"5","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Box Squat","section":"Super set","warmup_sets":"1","warmup_reps":"5","warmup_intensity":"5-6 (RIR)","working_sets":"8","working_reps":"3","working_intensity":"(1-2 RiR)","weight":"185","rest":"45 seconds","notes":"This should be about 70% of your estimated 1 rep max"},{"name":"Bench Press","section":"Super set","warmup_sets":"1","warmup_reps":"5","warmup_intensity":"5-6 (RIR)","working_sets":"8","working_reps":"3","working_intensity":"(1-2 RiR)","weight":"165","rest":"45 seconds","notes":"This should be about 70% of your estimated 1 rep max 1 rep max = 205 today"},{"name":"DB RDL","section":"Super set","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"4","working_reps":"8","working_intensity":"Moderate","weight":"","rest":"1 minute","notes":""},{"name":"Seated Shoulder press DB","section":"Super set","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"8-10","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Cable Curl","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"15","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Farmer Carry","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"30 seconds","working_intensity":"","weight":"","rest":"","notes":"As heavy as possible"},{"name":"Rower","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"10","working_reps":"10 calories","working_intensity":"Hard","weight":"","rest":"30 sec.","notes":""}]},{"phase":2,"week":2,"day":1,"title":"Day 1 Lower body focus","exercises":[{"name":"Warm up","section":"Main","warmup_sets":"Sled drag or push","warmup_reps":"","warmup_intensity":"","working_sets":"1","working_reps":"5minutes","working_intensity":"Moderate","weight":"N/A","rest":"","notes":""},{"name":"Hip Air Plane","section":"Main","warmup_sets":"2","warmup_reps":"5e.s.","warmup_intensity":"easy","working_sets":"2","working_reps":"5e.s.","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Hanging Leg raise","section":"Main","warmup_sets":"2","warmup_reps":"10","warmup_intensity":"easy","working_sets":"2","working_reps":"10","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Suitcase Carry","section":"Main","warmup_sets":"2","warmup_reps":"10 yards e.s.","warmup_intensity":"easy","working_sets":"2","working_reps":"10 e.s.","working_intensity":"","weight":"","rest":"","notes":""},{"name":"single leg pogo","section":"Super set","warmup_sets":"","warmup_reps":"","warmup_intensity":"","working_sets":"4","working_reps":"30 e.s.","working_intensity":"","weight":"","rest":"","notes":""},{"name":"SSB Squat","section":"Super set","warmup_sets":"2","warmup_reps":"5","warmup_intensity":"5-6 (RIR)","working_sets":"1","working_reps":"3","working_intensity":"(1 RiR)","weight":"","rest":"1-2 min.","notes":"work up to a heavy set of 5"},{"name":"SSB Goodmorning","section":"Super set","warmup_sets":"1","warmup_reps":"5","warmup_intensity":"5-6 (RIR)","working_sets":"4","working_reps":"6","working_intensity":"(2 RiR)","weight":"","rest":"1-2 min.","notes":""},{"name":"GHD","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"5","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Inverted row","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"20","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Stir the pot","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"8e.s.","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Split squat iso","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"30 sec","working_intensity":"","weight":"","rest":"","notes":"Use weight if possible"}]},{"phase":2,"week":2,"day":2,"title":"Day 2 Upper Body focus","exercises":[{"name":"Mobility Work: Cycle Through Ankles,  Hips, Shoulders, Wrists","section":"Main","warmup_sets":"General 5 min. warm-up on Rower or Treadmill","warmup_reps":"","warmup_intensity":"","working_sets":"1","working_reps":"5minutes","working_intensity":"Moderate","weight":"N/A","rest":"","notes":""},{"name":"Band Pull aparts","section":"Main","warmup_sets":"2","warmup_reps":"20","warmup_intensity":"easy","working_sets":"2","working_reps":"20","working_intensity":"","weight":"","rest":"N/A","notes":""},{"name":"Tricep press downs","section":"Main","warmup_sets":"2","warmup_reps":"5","warmup_intensity":"easy","working_sets":"2","working_reps":"20","working_intensity":"","weight":"","rest":"N/A","notes":""},{"name":"KB bottoms up press","section":"Main","warmup_sets":"2","warmup_reps":"5e.s.","warmup_intensity":"easy","working_sets":"2","working_reps":"5e.s.","working_intensity":"","weight":"","rest":"N/A","notes":""},{"name":"Med ball rotational slam","section":"Super set","warmup_sets":"","warmup_reps":"","warmup_intensity":"","working_sets":"4","working_reps":"5","working_intensity":"","weight":"","rest":"N/A","notes":""},{"name":"Barbell spoto press","section":"Super set","warmup_sets":"1","warmup_reps":"5","warmup_intensity":"5-6 (RIR)","working_sets":"1","working_reps":"3","working_intensity":"(1-2 RiR)","weight":"185","rest":"1-2 min.","notes":"Work up to a heavy set of 5"},{"name":"N.G. Pulldown","section":"Super set","warmup_sets":"1","warmup_reps":"5","warmup_intensity":"5-6 (RIR)","working_sets":"4","working_reps":"10-12","working_intensity":"(1-2 RiR)","weight":"","rest":"1-2 min.","notes":""},{"name":"Chest supported row","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"10","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Boat Hold","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"30 seconds","working_intensity":"","weight":"","rest":"","notes":""},{"name":"DB Pullover","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"10","working_intensity":"","weight":"","rest":"","notes":""},{"name":"DB Alternating Bicep Curl","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"10e.s.","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Roll outs","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"30 seconds","working_intensity":"Hard","weight":"","rest":"30 seconds between rounds","notes":""}]},{"phase":2,"week":2,"day":3,"title":"Day 3 Hinge focus","exercises":[{"name":"Warm up","section":"Main","warmup_sets":"Sled drag or push","warmup_reps":"","warmup_intensity":"","working_sets":"1","working_reps":"5minutes","working_intensity":"Moderate","weight":"N/A","rest":"","notes":""},{"name":"Hip Air Plane","section":"Main","warmup_sets":"2","warmup_reps":"5e.s.","warmup_intensity":"easy","working_sets":"2","working_reps":"5e.s.","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Hanging Leg raise","section":"Main","warmup_sets":"2","warmup_reps":"10","warmup_intensity":"easy","working_sets":"2","working_reps":"5","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Suitcase Carry","section":"Main","warmup_sets":"2","warmup_reps":"10 yards e.s.","warmup_intensity":"easy","working_sets":"2","working_reps":"10yds","working_intensity":"","weight":"","rest":"","notes":""},{"name":"seated long jump","section":"Super set","warmup_sets":"","warmup_reps":"","warmup_intensity":"","working_sets":"4","working_reps":"5","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Box Squat","section":"Super set","warmup_sets":"1","warmup_reps":"5","warmup_intensity":"5-6 (RIR)","working_sets":"8","working_reps":"3","working_intensity":"(1-2 RiR)","weight":"","rest":"45 seconds","notes":"This should be about 75% of your estimated 1 rep max"},{"name":"Bench Press","section":"Super set","warmup_sets":"1","warmup_reps":"5","warmup_intensity":"5-6 (RIR)","working_sets":"8","working_reps":"3","working_intensity":"(1-2 RiR)","weight":"","rest":"45 seconds","notes":"This should be about 75% of your estimated 1 rep max 1 rep max = 185"},{"name":"DB RDL","section":"Super set","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"4","working_reps":"8","working_intensity":"Moderate","weight":"","rest":"1 minute","notes":""},{"name":"Seated Shoulder press DB","section":"Super set","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"8-10","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Cable Curl","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"15","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Farmer Carry","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"30 seconds","working_intensity":"","weight":"","rest":"","notes":"As heavy as possible"},{"name":"Rower","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"10","working_reps":"10 calories","working_intensity":"Hard","weight":"","rest":"30 sec.","notes":""}]},{"phase":2,"week":3,"day":1,"title":"Day 1 Lower body focus","exercises":[{"name":"Warm up","section":"Main","warmup_sets":"Sled drag or push","warmup_reps":"","warmup_intensity":"","working_sets":"1","working_reps":"5minutes","working_intensity":"Moderate","weight":"N/A","rest":"","notes":""},{"name":"Hip Air Plane","section":"Main","warmup_sets":"2","warmup_reps":"5e.s.","warmup_intensity":"easy","working_sets":"2","working_reps":"5e.s.","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Hanging Leg raise","section":"Main","warmup_sets":"2","warmup_reps":"10","warmup_intensity":"easy","working_sets":"2","working_reps":"10","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Suitcase Carry","section":"Main","warmup_sets":"2","warmup_reps":"10 yards e.s.","warmup_intensity":"easy","working_sets":"2","working_reps":"10 e.s.","working_intensity":"","weight":"","rest":"","notes":""},{"name":"single leg pogo","section":"Super set","warmup_sets":"","warmup_reps":"","warmup_intensity":"","working_sets":"4","working_reps":"30 e.s.","working_intensity":"","weight":"","rest":"","notes":""},{"name":"SSB Squat","section":"Super set","warmup_sets":"2","warmup_reps":"5","warmup_intensity":"5-6 (RIR)","working_sets":"1","working_reps":"2","working_intensity":"(1 RiR)","weight":"160","rest":"1-2 min.","notes":"work up to a heavy set of 5"},{"name":"SSB Goodmorning","section":"Super set","warmup_sets":"1","warmup_reps":"5","warmup_intensity":"5-6 (RIR)","working_sets":"4","working_reps":"6","working_intensity":"(2 RiR)","weight":"70","rest":"1-2 min.","notes":""},{"name":"GHD","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"5","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Inverted row","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"20","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Stir the pot","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"8e.s.","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Split squat iso","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"30 sec","working_intensity":"","weight":"","rest":"","notes":"Use weight if possible"}]},{"phase":2,"week":3,"day":2,"title":"Day 2 Upper Body focus","exercises":[{"name":"Mobility Work: Cycle Through Ankles,  Hips, Shoulders, Wrists","section":"Main","warmup_sets":"General 5 min. warm-up on Rower or Treadmill","warmup_reps":"","warmup_intensity":"","working_sets":"1","working_reps":"5minutes","working_intensity":"Moderate","weight":"N/A","rest":"","notes":""},{"name":"Band Pull aparts","section":"Main","warmup_sets":"2","warmup_reps":"20","warmup_intensity":"easy","working_sets":"2","working_reps":"20","working_intensity":"","weight":"","rest":"N/A","notes":""},{"name":"Tricep press downs","section":"Main","warmup_sets":"2","warmup_reps":"5","warmup_intensity":"easy","working_sets":"2","working_reps":"20","working_intensity":"","weight":"","rest":"N/A","notes":""},{"name":"KB bottoms up press","section":"Main","warmup_sets":"2","warmup_reps":"5e.s.","warmup_intensity":"easy","working_sets":"2","working_reps":"5e.s.","working_intensity":"","weight":"","rest":"N/A","notes":""},{"name":"Med ball rotational slam","section":"Super set","warmup_sets":"","warmup_reps":"","warmup_intensity":"","working_sets":"4","working_reps":"5","working_intensity":"","weight":"","rest":"N/A","notes":""},{"name":"Barbell spoto press","section":"Super set","warmup_sets":"1","warmup_reps":"5","warmup_intensity":"5-6 (RIR)","working_sets":"1","working_reps":"2","working_intensity":"(1-2 RiR)","weight":"","rest":"1-2 min.","notes":"Work up to a heavy set of 5"},{"name":"N.G. Pulldown","section":"Super set","warmup_sets":"1","warmup_reps":"5","warmup_intensity":"5-6 (RIR)","working_sets":"4","working_reps":"10-12","working_intensity":"(1-2 RiR)","weight":"","rest":"1-2 min.","notes":""},{"name":"Chest supported row","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"10","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Boat Hold","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"30 seconds","working_intensity":"","weight":"","rest":"","notes":""},{"name":"DB Pullover","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"10","working_intensity":"","weight":"","rest":"","notes":""},{"name":"DB Alternating Bicep Curl","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"10e.s.","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Roll outs","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"30 seconds","working_intensity":"Hard","weight":"","rest":"30 seconds between rounds","notes":""}]},{"phase":2,"week":3,"day":3,"title":"Day 3 Hinge focus","exercises":[{"name":"Warm up","section":"Main","warmup_sets":"Sled drag or push","warmup_reps":"","warmup_intensity":"","working_sets":"1","working_reps":"5minutes","working_intensity":"Moderate","weight":"N/A","rest":"","notes":""},{"name":"Hip Air Plane","section":"Main","warmup_sets":"2","warmup_reps":"5e.s.","warmup_intensity":"easy","working_sets":"2","working_reps":"5e.s.","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Hanging Leg raise","section":"Main","warmup_sets":"2","warmup_reps":"10","warmup_intensity":"easy","working_sets":"2","working_reps":"5","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Suitcase Carry","section":"Main","warmup_sets":"2","warmup_reps":"10 yards e.s.","warmup_intensity":"easy","working_sets":"2","working_reps":"10yds","working_intensity":"","weight":"","rest":"","notes":""},{"name":"seated long jump","section":"Super set","warmup_sets":"","warmup_reps":"","warmup_intensity":"","working_sets":"4","working_reps":"5","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Box Squat","section":"Super set","warmup_sets":"1","warmup_reps":"5","warmup_intensity":"5-6 (RIR)","working_sets":"8","working_reps":"3","working_intensity":"(1-2 RiR)","weight":"225","rest":"45 seconds","notes":"This should be about 80% of your estimated 1 rep max"},{"name":"Bench Press","section":"Super set","warmup_sets":"1","warmup_reps":"5","warmup_intensity":"5-6 (RIR)","working_sets":"8","working_reps":"3","working_intensity":"(1-2 RiR)","weight":"175","rest":"45 seconds","notes":"This should be about 80% of your estimated 1 rep max 1 rep max = 185"},{"name":"DB RDL","section":"Super set","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"4","working_reps":"8","working_intensity":"Moderate","weight":"185","rest":"1 minute","notes":"Trad deadlifts"},{"name":"Seated Shoulder press DB","section":"Super set","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"8-10","working_intensity":"","weight":"45","rest":"","notes":""},{"name":"Cable Curl","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"15","working_intensity":"","weight":"50","rest":"","notes":""},{"name":"Farmer Carry","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"30 seconds","working_intensity":"","weight":"","rest":"","notes":"As heavy as possible"},{"name":"Rower","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"10","working_reps":"10 calories","working_intensity":"Hard","weight":"","rest":"30 sec.","notes":""}]},{"phase":2,"week":4,"day":1,"title":"Day 1 Lower body focus","exercises":[{"name":"Warm up","section":"Main","warmup_sets":"Sled drag or push","warmup_reps":"","warmup_intensity":"","working_sets":"1","working_reps":"5minutes","working_intensity":"Moderate","weight":"N/A","rest":"","notes":""},{"name":"Hip Air Plane","section":"Main","warmup_sets":"2","warmup_reps":"5e.s.","warmup_intensity":"easy","working_sets":"2","working_reps":"5e.s.","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Hanging Leg raise","section":"Main","warmup_sets":"2","warmup_reps":"10","warmup_intensity":"easy","working_sets":"2","working_reps":"10","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Suitcase Carry","section":"Main","warmup_sets":"2","warmup_reps":"10 yards e.s.","warmup_intensity":"easy","working_sets":"2","working_reps":"10 e.s.","working_intensity":"","weight":"","rest":"","notes":""},{"name":"single leg pogo","section":"Super set","warmup_sets":"","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"30 e.s.","working_intensity":"","weight":"","rest":"","notes":""},{"name":"SSB Squat","section":"Super set","warmup_sets":"2","warmup_reps":"5","warmup_intensity":"5-6 (RIR)","working_sets":"1","working_reps":"5","working_intensity":"(1 RiR)","weight":"","rest":"1-2 min.","notes":"work up to a heavy set of 5"},{"name":"SSB Goodmorning","section":"Super set","warmup_sets":"1","warmup_reps":"5","warmup_intensity":"5-6 (RIR)","working_sets":"4","working_reps":"6","working_intensity":"(2 RiR)","weight":"","rest":"1-2 min.","notes":""},{"name":"GHD","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"5","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Inverted row","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"20","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Stir the pot","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"8e.s.","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Split squat iso","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"30 sec","working_intensity":"","weight":"","rest":"","notes":"Use weight if possible"}]},{"phase":2,"week":4,"day":2,"title":"Day 2 Upper Body focus","exercises":[{"name":"Mobility Work: Cycle Through Ankles,  Hips, Shoulders, Wrists","section":"Main","warmup_sets":"General 5 min. warm-up on Rower or Treadmill","warmup_reps":"","warmup_intensity":"","working_sets":"1","working_reps":"5minutes","working_intensity":"Moderate","weight":"N/A","rest":"","notes":""},{"name":"Band Pull aparts","section":"Main","warmup_sets":"2","warmup_reps":"20","warmup_intensity":"easy","working_sets":"2","working_reps":"20","working_intensity":"","weight":"","rest":"N/A","notes":""},{"name":"Tricep press downs","section":"Main","warmup_sets":"2","warmup_reps":"5","warmup_intensity":"easy","working_sets":"2","working_reps":"20","working_intensity":"","weight":"","rest":"N/A","notes":""},{"name":"KB bottoms up press","section":"Main","warmup_sets":"2","warmup_reps":"5e.s.","warmup_intensity":"easy","working_sets":"2","working_reps":"5e.s.","working_intensity":"","weight":"","rest":"N/A","notes":""},{"name":"Med ball rotational slam","section":"Super set","warmup_sets":"","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"5","working_intensity":"","weight":"","rest":"N/A","notes":""},{"name":"Barbell spoto press","section":"Super set","warmup_sets":"1","warmup_reps":"5","warmup_intensity":"5-6 (RIR)","working_sets":"1","working_reps":"5","working_intensity":"(1-2 RiR)","weight":"155","rest":"1-2 min.","notes":"Work up to a heavy set of 5"},{"name":"N.G. Pulldown","section":"Super set","warmup_sets":"1","warmup_reps":"5","warmup_intensity":"5-6 (RIR)","working_sets":"4","working_reps":"10-12","working_intensity":"(1-2 RiR)","weight":"","rest":"1-2 min.","notes":""},{"name":"Chest supported row","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"10","working_intensity":"","weight":"40","rest":"","notes":""},{"name":"Boat Hold","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"30 seconds","working_intensity":"","weight":"","rest":"","notes":""},{"name":"DB Pullover","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"10","working_intensity":"","weight":"","rest":"","notes":""},{"name":"DB Alternating Bicep Curl","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"10e.s.","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Roll outs","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"30 seconds","working_intensity":"Hard","weight":"","rest":"30 seconds between rounds","notes":""}]},{"phase":2,"week":4,"day":3,"title":"Day 3 Hinge focus","exercises":[{"name":"Warm up","section":"Main","warmup_sets":"Sled drag or push","warmup_reps":"","warmup_intensity":"","working_sets":"1","working_reps":"5minutes","working_intensity":"Moderate","weight":"N/A","rest":"","notes":""},{"name":"Hip Air Plane","section":"Main","warmup_sets":"2","warmup_reps":"5e.s.","warmup_intensity":"easy","working_sets":"2","working_reps":"5e.s.","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Hanging Leg raise","section":"Main","warmup_sets":"2","warmup_reps":"10","warmup_intensity":"easy","working_sets":"2","working_reps":"5","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Suitcase Carry","section":"Main","warmup_sets":"2","warmup_reps":"10 yards e.s.","warmup_intensity":"easy","working_sets":"2","working_reps":"10yds","working_intensity":"","weight":"","rest":"","notes":""},{"name":"seated long jump","section":"Super set","warmup_sets":"","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"5","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Box Squat","section":"Super set","warmup_sets":"1","warmup_reps":"5","warmup_intensity":"5-6 (RIR)","working_sets":"8","working_reps":"3","working_intensity":"(1-2 RiR)","weight":"225","rest":"45 seconds","notes":"This should be about 70% of your estimated 1 rep max"},{"name":"Bench Press","section":"Super set","warmup_sets":"1","warmup_reps":"5","warmup_intensity":"5-6 (RIR)","working_sets":"8","working_reps":"3","working_intensity":"(1-2 RiR)","weight":"","rest":"45 seconds","notes":"This should be about 70% of your estimated 1 rep max 1 rep max = 185"},{"name":"DB RDL","section":"Super set","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"4","working_reps":"8","working_intensity":"Moderate","weight":"","rest":"1 minute","notes":""},{"name":"Seated Shoulder press DB","section":"Super set","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"8-10","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Cable Curl","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"15","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Farmer Carry","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"30 seconds","working_intensity":"","weight":"","rest":"","notes":"As heavy as possible"},{"name":"Rower","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"10","working_reps":"10 calories","working_intensity":"Hard","weight":"","rest":"30 sec.","notes":""}]},{"phase":3,"week":1,"day":1,"title":"Day 1 Lower body focus","exercises":[{"name":"Warm up","section":"Main","warmup_sets":"Sled drag or push","warmup_reps":"","warmup_intensity":"","working_sets":"1","working_reps":"5minutes","working_intensity":"Moderate","weight":"N/A","rest":"","notes":""},{"name":"Hip Air Plane","section":"Main","warmup_sets":"2","warmup_reps":"5e.s.","warmup_intensity":"easy","working_sets":"2","working_reps":"5e.s.","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Hanging Leg raise","section":"Main","warmup_sets":"2","warmup_reps":"10","warmup_intensity":"easy","working_sets":"2","working_reps":"10","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Lunge","section":"Main","warmup_sets":"2","warmup_reps":"10 yards e.s.","warmup_intensity":"easy","working_sets":"2","working_reps":"10 e.s.","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Occ. squat jump","section":"Super set","warmup_sets":"","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"15","working_intensity":"","weight":"","rest":"","notes":""},{"name":"SSB Split Squat","section":"Super set","warmup_sets":"2","warmup_reps":"5","warmup_intensity":"5-6 (RIR)","working_sets":"4","working_reps":"6 each side","working_intensity":"(1 RiR)","weight":"90","rest":"1-2 min.","notes":"Took it easy due to pulled hamstring"},{"name":"barbell Rdl","section":"Super set","warmup_sets":"1","warmup_reps":"5","warmup_intensity":"5-6 (RIR)","working_sets":"4","working_reps":"10","working_intensity":"(2 RiR)","weight":"135","rest":"1-2 min.","notes":"5 @ 185 for last set"},{"name":"Cossak squat","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"5 e.s.","working_intensity":"","weight":"","rest":"","notes":""},{"name":"copehagen plank","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"30 seconds each side","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Sissy squat","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"15","working_intensity":"","weight":"","rest":"","notes":""},{"name":"calf raise","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"20","working_intensity":"","weight":"","rest":"","notes":""}]},{"phase":3,"week":1,"day":2,"title":"Day 2 Upper Body focus","exercises":[{"name":"Mobility Work: Cycle Through Ankles,  Hips, Shoulders, Wrists","section":"Main","warmup_sets":"General 5 min. warm-up on Rower or Treadmill","warmup_reps":"","warmup_intensity":"","working_sets":"1","working_reps":"5minutes","working_intensity":"Moderate","weight":"N/A","rest":"","notes":""},{"name":"Band Pull aparts","section":"Main","warmup_sets":"2","warmup_reps":"20","warmup_intensity":"easy","working_sets":"2","working_reps":"20","working_intensity":"","weight":"","rest":"N/A","notes":""},{"name":"Pull up","section":"Main","warmup_sets":"2","warmup_reps":"5","warmup_intensity":"easy","working_sets":"2","working_reps":"20","working_intensity":"","weight":"","rest":"N/A","notes":""},{"name":"Push up","section":"Main","warmup_sets":"2","warmup_reps":"10","warmup_intensity":"easy","working_sets":"2","working_reps":"5e.s.","working_intensity":"","weight":"","rest":"N/A","notes":""},{"name":"MB Chest Pass","section":"Super set","warmup_sets":"","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"20","working_intensity":"","weight":"","rest":"N/A","notes":""},{"name":"Incline Close grip bench","section":"Super set","warmup_sets":"1","warmup_reps":"5","warmup_intensity":"5-6 (RIR)","working_sets":"4","working_reps":"8","working_intensity":"(1-2 RiR)","weight":"135","rest":"1-2 min.","notes":""},{"name":"Chest supported row","section":"Super set","warmup_sets":"1","warmup_reps":"5","warmup_intensity":"5-6 (RIR)","working_sets":"4","working_reps":"10-12","working_intensity":"(1-2 RiR)","weight":"45","rest":"1-2 min.","notes":""},{"name":"Lateral raise","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"10","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Up right row","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"30 seconds","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Preacher Curl","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"10","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Skull crusher","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"10e.s.","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Roll outs","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"30 seconds","working_intensity":"Hard","weight":"","rest":"30 seconds between rounds","notes":""}]},{"phase":3,"week":1,"day":3,"title":"Day 3 Hinge focus","exercises":[{"name":"Warm up","section":"Main","warmup_sets":"Sled drag or push","warmup_reps":"","warmup_intensity":"","working_sets":"1","working_reps":"5minutes","working_intensity":"Moderate","weight":"N/A","rest":"","notes":""},{"name":"Hip Air Plane","section":"Main","warmup_sets":"2","warmup_reps":"5e.s.","warmup_intensity":"easy","working_sets":"2","working_reps":"5e.s.","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Plank","section":"Main","warmup_sets":"2","warmup_reps":"10","warmup_intensity":"easy","working_sets":"2","working_reps":"30 seconds","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Farmers carry","section":"Main","warmup_sets":"2","warmup_reps":"10 yards e.s.","warmup_intensity":"easy","working_sets":"2","working_reps":"10yds","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Drop Lunge","section":"Super set","warmup_sets":"","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"10 e.s.","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Trap Bar deadlift","section":"Super set","warmup_sets":"1","warmup_reps":"5","warmup_intensity":"5-6 (RIR)","working_sets":"8","working_reps":"3","working_intensity":"(1-2 RiR)","weight":"255","rest":"45 seconds","notes":"This should be about 70% of your estimated 1 rep max"},{"name":"DB Bench Press","section":"Super set","warmup_sets":"1","warmup_reps":"5","warmup_intensity":"5-6 (RIR)","working_sets":"4","working_reps":"6","working_intensity":"(1-2 RiR)","weight":"75","rest":"45 seconds","notes":""},{"name":"DB RDL","section":"Super set","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"4","working_reps":"8","working_intensity":"Moderate","weight":"","rest":"1 minute","notes":""},{"name":"GHD Sit Up","section":"Super set","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"8-10","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Cable Curl","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"15","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Reverse Fly","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"30 seconds","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Air Bike","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"10","working_reps":"10 calories","working_intensity":"Hard","weight":"","rest":"30 sec.","notes":""}]},{"phase":3,"week":2,"day":1,"title":"Day 1 Lower body focus","exercises":[{"name":"Warm up","section":"Main","warmup_sets":"Sled drag or push","warmup_reps":"","warmup_intensity":"","working_sets":"1","working_reps":"5minutes","working_intensity":"Moderate","weight":"N/A","rest":"","notes":""},{"name":"Hip Air Plane","section":"Main","warmup_sets":"2","warmup_reps":"5e.s.","warmup_intensity":"easy","working_sets":"2","working_reps":"5e.s.","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Hanging Leg raise","section":"Main","warmup_sets":"2","warmup_reps":"10","warmup_intensity":"easy","working_sets":"2","working_reps":"10","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Lunge","section":"Main","warmup_sets":"2","warmup_reps":"10 yards e.s.","warmup_intensity":"easy","working_sets":"2","working_reps":"10 e.s.","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Occ. squat jump","section":"Super set","warmup_sets":"","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"15","working_intensity":"","weight":"","rest":"","notes":""},{"name":"SSB Split Squat","section":"Super set","warmup_sets":"2","warmup_reps":"5","warmup_intensity":"5-6 (RIR)","working_sets":"4","working_reps":"6 each side","working_intensity":"(1 RiR)","weight":"Bar","rest":"1-2 min.","notes":""},{"name":"barbell Rdl","section":"Super set","warmup_sets":"1","warmup_reps":"5","warmup_intensity":"5-6 (RIR)","working_sets":"4","working_reps":"10","working_intensity":"(2 RiR)","weight":"135","rest":"1-2 min.","notes":""},{"name":"Cossak squat","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"5 e.s.","working_intensity":"","weight":"","rest":"","notes":""},{"name":"copehagen plank","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"30 seconds each side","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Sissy squat","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"15","working_intensity":"","weight":"","rest":"","notes":""},{"name":"calf raise","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"20","working_intensity":"","weight":"","rest":"","notes":""}]},{"phase":3,"week":2,"day":2,"title":"Day 2 Upper Body focus","exercises":[{"name":"Mobility Work: Cycle Through Ankles,  Hips, Shoulders, Wrists","section":"Main","warmup_sets":"General 5 min. warm-up on Rower or Treadmill","warmup_reps":"","warmup_intensity":"","working_sets":"1","working_reps":"5minutes","working_intensity":"Moderate","weight":"N/A","rest":"","notes":""},{"name":"Band Pull aparts","section":"Main","warmup_sets":"2","warmup_reps":"20","warmup_intensity":"easy","working_sets":"2","working_reps":"20","working_intensity":"","weight":"","rest":"N/A","notes":""},{"name":"Pull up","section":"Main","warmup_sets":"2","warmup_reps":"5","warmup_intensity":"easy","working_sets":"2","working_reps":"20","working_intensity":"","weight":"","rest":"N/A","notes":""},{"name":"Push up","section":"Main","warmup_sets":"2","warmup_reps":"10","warmup_intensity":"easy","working_sets":"2","working_reps":"5e.s.","working_intensity":"","weight":"","rest":"N/A","notes":""},{"name":"MB Chest Pass","section":"Super set","warmup_sets":"","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"20","working_intensity":"","weight":"","rest":"N/A","notes":""},{"name":"Incline Close grip bench","section":"Super set","warmup_sets":"1","warmup_reps":"5","warmup_intensity":"5-6 (RIR)","working_sets":"4","working_reps":"8","working_intensity":"(1-2 RiR)","weight":"120","rest":"1-2 min.","notes":""},{"name":"Chest supported row","section":"Super set","warmup_sets":"1","warmup_reps":"5","warmup_intensity":"5-6 (RIR)","working_sets":"4","working_reps":"10-12","working_intensity":"(1-2 RiR)","weight":"","rest":"1-2 min.","notes":""},{"name":"Lateral raise","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"10","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Up right row","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"30 seconds","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Preacher Curl","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"10","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Skull crusher","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"10e.s.","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Roll outs","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"30 seconds","working_intensity":"Hard","weight":"","rest":"30 seconds between rounds","notes":""}]},{"phase":3,"week":2,"day":3,"title":"Day 3 Hinge focus","exercises":[{"name":"Warm up","section":"Main","warmup_sets":"Sled drag or push","warmup_reps":"","warmup_intensity":"","working_sets":"1","working_reps":"5minutes","working_intensity":"Moderate","weight":"N/A","rest":"","notes":""},{"name":"Hip Air Plane","section":"Main","warmup_sets":"2","warmup_reps":"5e.s.","warmup_intensity":"easy","working_sets":"2","working_reps":"5e.s.","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Plank","section":"Main","warmup_sets":"2","warmup_reps":"10","warmup_intensity":"easy","working_sets":"2","working_reps":"30 seconds","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Farmers carry","section":"Main","warmup_sets":"2","warmup_reps":"10 yards e.s.","warmup_intensity":"easy","working_sets":"2","working_reps":"10yds","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Drop Lunge","section":"Super set","warmup_sets":"","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"10 e.s.","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Trap Bar deadlift","section":"Super set","warmup_sets":"1","warmup_reps":"5","warmup_intensity":"5-6 (RIR)","working_sets":"8","working_reps":"3","working_intensity":"(1-2 RiR)","weight":"225","rest":"45 seconds","notes":"This should be about 70% of your estimated 1 rep max"},{"name":"DB Bench Press","section":"Super set","warmup_sets":"1","warmup_reps":"5","warmup_intensity":"5-6 (RIR)","working_sets":"4","working_reps":"6","working_intensity":"(1-2 RiR)","weight":"","rest":"45 seconds","notes":""},{"name":"DB RDL","section":"Super set","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"4","working_reps":"8","working_intensity":"Moderate","weight":"","rest":"1 minute","notes":""},{"name":"GHD Sit Up","section":"Super set","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"8-10","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Cable Curl","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"15","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Reverse Fly","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"30 seconds","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Air Bike","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"10","working_reps":"10 calories","working_intensity":"Hard","weight":"","rest":"30 sec.","notes":""}]},{"phase":3,"week":3,"day":1,"title":"Day 1 Lower body focus","exercises":[{"name":"Warm up","section":"Main","warmup_sets":"Sled drag or push","warmup_reps":"","warmup_intensity":"","working_sets":"1","working_reps":"5minutes","working_intensity":"Moderate","weight":"N/A","rest":"","notes":""},{"name":"Hip Air Plane","section":"Main","warmup_sets":"2","warmup_reps":"5e.s.","warmup_intensity":"easy","working_sets":"2","working_reps":"5e.s.","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Hanging Leg raise","section":"Main","warmup_sets":"2","warmup_reps":"10","warmup_intensity":"easy","working_sets":"2","working_reps":"10","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Lunge","section":"Main","warmup_sets":"2","warmup_reps":"10 yards e.s.","warmup_intensity":"easy","working_sets":"2","working_reps":"10 e.s.","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Occ. squat jump","section":"Super set","warmup_sets":"","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"15","working_intensity":"","weight":"","rest":"","notes":""},{"name":"SSB Split Squat","section":"Super set","warmup_sets":"2","warmup_reps":"5","warmup_intensity":"5-6 (RIR)","working_sets":"4","working_reps":"6 each side","working_intensity":"(1 RiR)","weight":"","rest":"1-2 min.","notes":""},{"name":"barbell Rdl","section":"Super set","warmup_sets":"1","warmup_reps":"5","warmup_intensity":"5-6 (RIR)","working_sets":"4","working_reps":"10","working_intensity":"(2 RiR)","weight":"70","rest":"1-2 min.","notes":""},{"name":"Cossak squat","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"5 e.s.","working_intensity":"","weight":"","rest":"","notes":""},{"name":"copehagen plank","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"30 seconds each side","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Sissy squat","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"15","working_intensity":"","weight":"","rest":"","notes":""},{"name":"calf raise","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"20","working_intensity":"","weight":"","rest":"","notes":""}]},{"phase":3,"week":3,"day":2,"title":"Day 2 Upper Body focus","exercises":[{"name":"Mobility Work: Cycle Through Ankles,  Hips, Shoulders, Wrists","section":"Main","warmup_sets":"General 5 min. warm-up on Rower or Treadmill","warmup_reps":"","warmup_intensity":"","working_sets":"1","working_reps":"5minutes","working_intensity":"Moderate","weight":"N/A","rest":"","notes":""},{"name":"Band Pull aparts","section":"Main","warmup_sets":"2","warmup_reps":"20","warmup_intensity":"easy","working_sets":"2","working_reps":"20","working_intensity":"","weight":"","rest":"N/A","notes":""},{"name":"Pull up","section":"Main","warmup_sets":"2","warmup_reps":"5","warmup_intensity":"easy","working_sets":"2","working_reps":"20","working_intensity":"","weight":"","rest":"N/A","notes":""},{"name":"Push up","section":"Main","warmup_sets":"2","warmup_reps":"10","warmup_intensity":"easy","working_sets":"2","working_reps":"5e.s.","working_intensity":"","weight":"","rest":"N/A","notes":""},{"name":"MB Chest Pass","section":"Super set","warmup_sets":"","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"20","working_intensity":"","weight":"","rest":"N/A","notes":""},{"name":"Incline Close grip bench","section":"Super set","warmup_sets":"1","warmup_reps":"5","warmup_intensity":"5-6 (RIR)","working_sets":"4","working_reps":"8","working_intensity":"(1-2 RiR)","weight":"120","rest":"1-2 min.","notes":""},{"name":"Chest supported row","section":"Super set","warmup_sets":"1","warmup_reps":"5","warmup_intensity":"5-6 (RIR)","working_sets":"4","working_reps":"10-12","working_intensity":"(1-2 RiR)","weight":"110","rest":"1-2 min.","notes":""},{"name":"Lateral raise","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"10","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Up right row","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"30 seconds","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Preacher Curl","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"10","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Skull crusher","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"10e.s.","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Roll outs","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"30 seconds","working_intensity":"Hard","weight":"","rest":"30 seconds between rounds","notes":""}]},{"phase":3,"week":3,"day":3,"title":"Day 3 Hinge focus","exercises":[{"name":"Warm up","section":"Main","warmup_sets":"Sled drag or push","warmup_reps":"","warmup_intensity":"","working_sets":"1","working_reps":"5minutes","working_intensity":"Moderate","weight":"N/A","rest":"","notes":""},{"name":"Hip Air Plane","section":"Main","warmup_sets":"2","warmup_reps":"5e.s.","warmup_intensity":"easy","working_sets":"2","working_reps":"5e.s.","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Plank","section":"Main","warmup_sets":"2","warmup_reps":"10","warmup_intensity":"easy","working_sets":"2","working_reps":"30 seconds","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Farmers carry","section":"Main","warmup_sets":"2","warmup_reps":"10 yards e.s.","warmup_intensity":"easy","working_sets":"2","working_reps":"10yds","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Drop Lunge","section":"Super set","warmup_sets":"","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"10 e.s.","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Trap Bar deadlift","section":"Super set","warmup_sets":"1","warmup_reps":"5","warmup_intensity":"5-6 (RIR)","working_sets":"8","working_reps":"3","working_intensity":"(1-2 RiR)","weight":"245","rest":"45 seconds","notes":"This should be about 70% of your estimated 1 rep max"},{"name":"DB Bench Press","section":"Super set","warmup_sets":"1","warmup_reps":"5","warmup_intensity":"5-6 (RIR)","working_sets":"4","working_reps":"6","working_intensity":"(1-2 RiR)","weight":"160","rest":"45 seconds","notes":""},{"name":"DB RDL","section":"Super set","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"4","working_reps":"8","working_intensity":"Moderate","weight":"","rest":"1 minute","notes":""},{"name":"GHD Sit Up","section":"Super set","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"8-10","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Cable Curl","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"15","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Reverse Fly","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"30 seconds","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Air Bike","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"10","working_reps":"10 calories","working_intensity":"Hard","weight":"","rest":"30 sec.","notes":""}]},{"phase":3,"week":4,"day":1,"title":"Day 1 Lower body focus","exercises":[{"name":"Warm up","section":"Main","warmup_sets":"Sled drag or push","warmup_reps":"","warmup_intensity":"","working_sets":"1","working_reps":"5minutes","working_intensity":"Moderate","weight":"N/A","rest":"","notes":""},{"name":"Hip Air Plane","section":"Main","warmup_sets":"2","warmup_reps":"5e.s.","warmup_intensity":"easy","working_sets":"2","working_reps":"5e.s.","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Hanging Leg raise","section":"Main","warmup_sets":"2","warmup_reps":"10","warmup_intensity":"easy","working_sets":"2","working_reps":"10","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Lunge","section":"Main","warmup_sets":"2","warmup_reps":"10 yards e.s.","warmup_intensity":"easy","working_sets":"2","working_reps":"10 e.s.","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Occ. squat jump","section":"Super set","warmup_sets":"","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"15","working_intensity":"","weight":"","rest":"","notes":""},{"name":"SSB Split Squat","section":"Super set","warmup_sets":"2","warmup_reps":"5","warmup_intensity":"5-6 (RIR)","working_sets":"4","working_reps":"6 each side","working_intensity":"(1 RiR)","weight":"","rest":"1-2 min.","notes":""},{"name":"barbell Rdl","section":"Super set","warmup_sets":"1","warmup_reps":"5","warmup_intensity":"5-6 (RIR)","working_sets":"4","working_reps":"10","working_intensity":"(2 RiR)","weight":"70","rest":"1-2 min.","notes":""},{"name":"Cossak squat","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"5 e.s.","working_intensity":"","weight":"","rest":"","notes":""},{"name":"copehagen plank","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"30 seconds each side","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Sissy squat","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"15","working_intensity":"","weight":"","rest":"","notes":""},{"name":"calf raise","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"20","working_intensity":"","weight":"","rest":"","notes":""}]},{"phase":3,"week":4,"day":2,"title":"Day 2 Upper Body focus","exercises":[{"name":"Mobility Work: Cycle Through Ankles,  Hips, Shoulders, Wrists","section":"Main","warmup_sets":"General 5 min. warm-up on Rower or Treadmill","warmup_reps":"","warmup_intensity":"","working_sets":"1","working_reps":"5minutes","working_intensity":"Moderate","weight":"N/A","rest":"","notes":""},{"name":"Band Pull aparts","section":"Main","warmup_sets":"2","warmup_reps":"20","warmup_intensity":"easy","working_sets":"2","working_reps":"20","working_intensity":"","weight":"","rest":"N/A","notes":""},{"name":"Pull up","section":"Main","warmup_sets":"2","warmup_reps":"5","warmup_intensity":"easy","working_sets":"2","working_reps":"20","working_intensity":"","weight":"","rest":"N/A","notes":""},{"name":"Push up","section":"Main","warmup_sets":"2","warmup_reps":"10","warmup_intensity":"easy","working_sets":"2","working_reps":"5e.s.","working_intensity":"","weight":"","rest":"N/A","notes":""},{"name":"MB Chest Pass","section":"Super set","warmup_sets":"","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"20","working_intensity":"","weight":"","rest":"N/A","notes":""},{"name":"Incline Close grip bench","section":"Super set","warmup_sets":"1","warmup_reps":"5","warmup_intensity":"5-6 (RIR)","working_sets":"4","working_reps":"8","working_intensity":"(1-2 RiR)","weight":"120","rest":"1-2 min.","notes":""},{"name":"Chest supported row","section":"Super set","warmup_sets":"1","warmup_reps":"5","warmup_intensity":"5-6 (RIR)","working_sets":"4","working_reps":"10-12","working_intensity":"(1-2 RiR)","weight":"","rest":"1-2 min.","notes":""},{"name":"Lateral raise","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"10","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Up right row","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"30 seconds","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Preacher Curl","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"10","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Skull crusher","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"10e.s.","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Roll outs","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"30 seconds","working_intensity":"Hard","weight":"","rest":"30 seconds between rounds","notes":""}]},{"phase":3,"week":4,"day":3,"title":"Day 3 Hinge focus","exercises":[{"name":"Warm up","section":"Main","warmup_sets":"Sled drag or push","warmup_reps":"","warmup_intensity":"","working_sets":"1","working_reps":"5minutes","working_intensity":"Moderate","weight":"N/A","rest":"","notes":""},{"name":"Hip Air Plane","section":"Main","warmup_sets":"2","warmup_reps":"5e.s.","warmup_intensity":"easy","working_sets":"2","working_reps":"5e.s.","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Plank","section":"Main","warmup_sets":"2","warmup_reps":"10","warmup_intensity":"easy","working_sets":"2","working_reps":"30 seconds","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Farmers carry","section":"Main","warmup_sets":"2","warmup_reps":"10 yards e.s.","warmup_intensity":"easy","working_sets":"2","working_reps":"10yds","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Drop Lunge","section":"Super set","warmup_sets":"","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"10 e.s.","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Trap Bar deadlift","section":"Super set","warmup_sets":"1","warmup_reps":"5","warmup_intensity":"5-6 (RIR)","working_sets":"8","working_reps":"3","working_intensity":"(1-2 RiR)","weight":"","rest":"45 seconds","notes":"This should be about 70% of your estimated 1 rep max"},{"name":"DB Bench Press","section":"Super set","warmup_sets":"1","warmup_reps":"5","warmup_intensity":"5-6 (RIR)","working_sets":"4","working_reps":"6","working_intensity":"(1-2 RiR)","weight":"","rest":"45 seconds","notes":""},{"name":"DB RDL","section":"Super set","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"4","working_reps":"8","working_intensity":"Moderate","weight":"","rest":"1 minute","notes":""},{"name":"GHD Sit Up","section":"Super set","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"8-10","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Cable Curl","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"15","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Reverse Fly","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"3","working_reps":"30 seconds","working_intensity":"","weight":"","rest":"","notes":""},{"name":"Air Bike","section":"Triset","warmup_sets":"None","warmup_reps":"","warmup_intensity":"","working_sets":"10","working_reps":"10 calories","working_intensity":"Hard","weight":"","rest":"30 sec.","notes":""}]}],"summary":{"phase1":{"weeks":3,"count":9},"phase2":{"weeks":4,"count":12},"phase3":{"weeks":4,"count":12}}};
+</script>
   <script>
+    // App State
+    let currentPhase = 1;
+    let currentWeek = 1;
+    let currentDay = 1;
     let currentCard = 0;
-    const totalCards = 7;
-    const completedCards = new Set();
+    let totalCards = 0;
+    let completedCards = new Set();
     
+    // Workout data will be loaded here
+    const workoutData = {
+      phase1: { weeks: 3 },
+      phase2: { weeks: 4 },
+      phase3: { weeks: 4 }
+    };
+    
+    // Navigation Functions
+    function showHome() {
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      document.getElementById('home-screen').classList.add('active');
+    }
+    
+    function selectPhase(phase) {
+      currentPhase = phase;
+      const weeks = phase === 1 ? 3 : 4;
+      
+      document.getElementById('phase-title').textContent = `Phase ${phase}`;
+      document.getElementById('phase-subtitle').textContent = `${weeks} weeks of training`;
+      
+      // Generate week buttons
+      const container = document.getElementById('weeks-container');
+      container.innerHTML = '';
+      
+      for (let i = 1; i <= weeks; i++) {
+        const btn = document.createElement('button');
+        btn.onclick = () => selectWeek(i);
+        btn.className = 'w-full bg-zinc-900 border-2 border-zinc-800 hover:border-orange-500 text-white p-5 rounded-xl transition-all text-left';
+        btn.innerHTML = `
+          <div class="flex items-center justify-between">
+            <div>
+              <h3 class="text-xl font-bold">Week ${i}</h3>
+              <p class="text-sm text-zinc-400">3 workout days</p>
+            </div>
+            <svg class="w-6 h-6 text-zinc-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+            </svg>
+          </div>
+        `;
+        container.appendChild(btn);
+      }
+      
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      document.getElementById('phase-screen').classList.add('active');
+    }
+    
+    function showPhaseScreen() {
+      selectPhase(currentPhase);
+    }
+    
+    function selectWeek(week) {
+      currentWeek = week;
+      
+      document.getElementById('week-title').textContent = `Week ${week}`;
+      document.getElementById('week-subtitle').textContent = `Phase ${currentPhase}`;
+      
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      document.getElementById('week-screen').classList.add('active');
+    }
+    
+    function showWeekScreen() {
+      selectWeek(currentWeek);
+    }
+    
+    function selectDay(day) {
+      currentDay = day;
+      loadWorkout(currentPhase, currentWeek, currentDay);
+    }
+    
+    // Load workout function - dynamically generates cards from data
+    function loadWorkout(phase, week, day) {
+      // Find the workout
+      const workout = WORKOUT_DATA.workouts.find(w => 
+        w.phase === phase && w.week === week && w.day === day
+      );
+      
+      if (!workout) {
+        alert(`Workout not found: Phase ${phase}, Week ${week}, Day ${day}`);
+        return;
+      }
+      
+      document.getElementById('workout-phase-week').textContent = `Phase ${phase} • Week ${week}`;
+      document.getElementById('workout-title').textContent = workout.title;
+      
+      // Reset state
+      currentCard = 0;
+      completedCards.clear();
+      
+      // Group exercises by section
+      const sections = {};
+      workout.exercises.forEach(ex => {
+        const section = ex.section || 'Main';
+        if (!sections[section]) sections[section] = [];
+        sections[section].push(ex);
+      });
+      
+      // Generate cards
+      const cardsContainer = document.getElementById('cards-container');
+      const dotsContainer = document.getElementById('dots-container');
+      cardsContainer.innerHTML = '';
+      dotsContainer.innerHTML = '';
+      
+      let cardIndex = 0;
+      
+      // Group into logical cards
+      const cards = [];
+      
+      // Warmup card
+      if (sections['Warmup'] || sections['Main']) {
+        const warmupExercises = sections['Warmup'] || sections['Main'].slice(0, 4);
+        cards.push({ type: 'warmup', exercises: warmupExercises });
+      }
+      
+      // Plyos card
+      if (sections['Plyos'] || sections['Super set']) {
+        const plyoExercises = (sections['Plyos'] || []).concat(
+          (sections['Super set'] || []).filter(e => e.name.toLowerCase().includes('jump') || e.name.toLowerCase().includes('plyo'))
+        ).slice(0, 2);
+        if (plyoExercises.length > 0) {
+          cards.push({ type: 'plyos', exercises: plyoExercises });
+        }
+      }
+      
+      // Main lifts
+      const mainLifts = (sections['Super set'] || sections['Main'] || []).filter(e => 
+        e.name.toLowerCase().includes('squat') || 
+        e.name.toLowerCase().includes('bench') ||
+        e.name.toLowerCase().includes('rdl') ||
+        e.name.toLowerCase().includes('press') ||
+        e.name.toLowerCase().includes('pulldown')
+      );
+      
+      mainLifts.slice(0, 2).forEach(ex => {
+        cards.push({ type: 'main', exercises: [ex] });
+      });
+      
+      // Trisets
+      if (sections['Triset']) {
+        // Group triset exercises in sets of 3
+        for (let i = 0; i < sections['Triset'].length; i += 3) {
+          cards.push({ type: 'triset', exercises: sections['Triset'].slice(i, i + 3) });
+        }
+      }
+      
+      // Conditioning
+      if (sections['Conditioning'] || sections['Cond.']) {
+        const condExercises = sections['Conditioning'] || sections['Cond.'] || [];
+        if (condExercises.length > 0) {
+          cards.push({ type: 'conditioning', exercises: condExercises });
+        }
+      }
+      
+      totalCards = cards.length;
+      
+      // Render cards
+      cards.forEach((card, idx) => {
+        const cardEl = document.createElement('div');
+        cardEl.className = `workout-card ${idx === 0 ? 'active' : 'next'}`;
+        cardEl.dataset.card = idx;
+        cardEl.innerHTML = generateCardHTML(card, idx);
+        cardsContainer.appendChild(cardEl);
+        
+        // Add dot
+        const dot = document.createElement('div');
+        dot.className = `dot ${idx === 0 ? 'active' : ''}`;
+        dot.dataset.index = idx;
+        dotsContainer.appendChild(dot);
+      });
+      
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      document.getElementById('workout-screen').classList.add('active');
+      
+      updateCardPositions();
+    }
+    
+    // Generate HTML for a workout card
+    function generateCardHTML(card, cardIndex) {
+      const { type, exercises } = card;
+      
+      if (type === 'warmup') {
+        return `
+          <div class="bg-zinc-900/50 border border-zinc-800 rounded-2xl p-6">
+            <div class="flex items-center gap-2 mb-4">
+              <div class="w-2 h-2 bg-blue-400 rounded-full"></div>
+              <h2 class="text-lg font-black text-white uppercase tracking-wide">Warmup</h2>
+            </div>
+            <div class="space-y-3 mb-4">
+              ${exercises.map(ex => `
+                <div class="bg-zinc-950/50 rounded-lg p-3">
+                  <div class="flex justify-between items-center mb-1">
+                    <span class="text-white font-semibold">${ex.name}</span>
+                    <span class="text-zinc-400 text-sm">${ex.working_sets} × ${ex.working_reps}</span>
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+            <button onclick="markCompleteAndNext(${cardIndex})" class="w-full bg-transparent border-2 border-green-500 hover:bg-green-500/10 text-white px-6 py-4 rounded-xl font-black text-lg transition-all flex items-center justify-center gap-2" id="complete-btn-${cardIndex}">
+              Mark Complete
+            </button>
+          </div>
+        `;
+      }
+      
+      if (type === 'plyos') {
+        return `
+          <div class="bg-zinc-900/50 border border-zinc-800 rounded-2xl p-6">
+            <div class="flex items-center gap-2 mb-4">
+              <div class="w-2 h-2 bg-purple-400 rounded-full"></div>
+              <h2 class="text-lg font-black text-white uppercase tracking-wide">Plyometrics</h2>
+              <span class="ml-auto text-xs text-purple-400 bg-purple-500/20 px-2 py-1 rounded">SUPERSET</span>
+            </div>
+            <div class="space-y-4 mb-4">
+              ${exercises.map(ex => `
+                <div class="bg-zinc-950/50 rounded-xl p-4">
+                  <div class="flex justify-between items-start mb-2">
+                    <span class="text-white font-bold">${ex.name}</span>
+                    <span class="text-orange-400 font-bold text-sm">${ex.working_sets} × ${ex.working_reps}</span>
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+            <button onclick="markCompleteAndNext(${cardIndex})" class="w-full bg-transparent border-2 border-green-500 hover:bg-green-500/10 text-white px-6 py-4 rounded-xl font-black text-lg transition-all flex items-center justify-center gap-2" id="complete-btn-${cardIndex}">
+              Mark Complete
+            </button>
+          </div>
+        `;
+      }
+      
+      if (type === 'main') {
+        const ex = exercises[0];
+        return `
+          <div class="bg-gradient-to-br from-orange-900/20 to-red-900/20 border border-orange-800/50 rounded-2xl p-6 overflow-y-auto max-h-[calc(100vh-250px)]">
+            <div class="flex items-center gap-2 mb-4">
+              <div class="w-2 h-2 bg-orange-400 rounded-full"></div>
+              <h2 class="text-lg font-black text-white uppercase tracking-wide">Main Lift</h2>
+              <span class="ml-auto text-xs text-orange-400 bg-orange-500/20 px-2 py-1 rounded">PRIMARY</span>
+            </div>
+            <h3 class="text-2xl font-black text-white mb-3">${ex.name}</h3>
+            ${ex.warmup_sets ? `
+              <div class="bg-zinc-950/50 rounded-xl p-3 mb-3">
+                <p class="text-xs text-zinc-500 uppercase tracking-wide mb-1">Warmup</p>
+                <div class="flex items-center justify-between">
+                  <span class="text-white font-semibold text-sm">${ex.warmup_sets} × ${ex.warmup_reps}</span>
+                  <span class="text-zinc-400 text-xs">@ ${ex.warmup_intensity}</span>
+                </div>
+              </div>
+            ` : ''}
+            <div class="bg-zinc-950/50 rounded-xl p-3 mb-3">
+              <p class="text-xs text-zinc-500 uppercase tracking-wide mb-1">Working Sets</p>
+              <div class="flex items-center justify-between">
+                <span class="text-orange-400 font-bold text-sm">${ex.working_sets} × ${ex.working_reps}</span>
+                <span class="text-orange-400 text-xs">@ ${ex.working_intensity}</span>
+              </div>
+              ${ex.notes ? `<p class="text-xs text-zinc-600 mt-2 italic">${ex.notes}</p>` : ''}
+            </div>
+            <div class="mb-3">
+              <label class="block text-xs text-zinc-400 uppercase tracking-wide mb-1">Weight (lbs)</label>
+              <input type="number" placeholder="${ex.weight || '0'}" class="w-full bg-zinc-900 border border-zinc-700 rounded-lg px-3 py-2 text-white text-lg font-bold">
+            </div>
+            <div class="mb-4">
+              <label class="block text-xs text-zinc-400 uppercase tracking-wide mb-1">Notes</label>
+              <input type="text" placeholder="How did it feel?" class="w-full bg-zinc-900 border border-zinc-700 rounded-lg px-3 py-2 text-white text-sm">
+            </div>
+            <button onclick="markCompleteAndNext(${cardIndex})" class="w-full bg-transparent border-2 border-green-500 hover:bg-green-500/10 text-white px-6 py-4 rounded-xl font-black text-lg transition-all flex items-center justify-center gap-2" id="complete-btn-${cardIndex}">
+              Mark Complete
+            </button>
+          </div>
+        `;
+      }
+      
+      if (type === 'triset') {
+        return `
+          <div class="bg-zinc-900/50 border border-zinc-800 rounded-2xl p-6 overflow-y-auto max-h-[calc(100vh-250px)]">
+            <div class="flex items-center gap-2 mb-4">
+              <div class="w-2 h-2 bg-cyan-400 rounded-full"></div>
+              <h2 class="text-lg font-black text-white uppercase tracking-wide">Triset</h2>
+              <span class="ml-auto text-xs text-cyan-400 bg-cyan-500/20 px-2 py-1 rounded">${exercises.length} EXERCISES</span>
+            </div>
+            <div class="space-y-3 mb-4">
+              ${exercises.map(ex => `
+                <div class="bg-zinc-950/50 rounded-xl p-3">
+                  <div class="flex justify-between items-start mb-2">
+                    <h4 class="text-white font-bold text-sm">${ex.name}</h4>
+                    <span class="text-orange-400 font-bold text-xs">${ex.working_sets} × ${ex.working_reps}</span>
+                  </div>
+                  <input type="number" placeholder="Weight" class="w-full bg-zinc-900 border border-zinc-700 rounded px-2 py-1 text-white text-sm mb-1">
+                  <input type="text" placeholder="Notes" class="w-full bg-zinc-900 border border-zinc-700 rounded px-2 py-1 text-white text-xs">
+                </div>
+              `).join('')}
+            </div>
+            ${exercises[0].rest ? `
+              <div class="mb-4 pt-3 border-t border-zinc-800">
+                <p class="text-xs text-zinc-500">Rest: ${exercises[0].rest}</p>
+              </div>
+            ` : ''}
+            <button onclick="markCompleteAndNext(${cardIndex})" class="w-full bg-transparent border-2 border-green-500 hover:bg-green-500/10 text-white px-6 py-4 rounded-xl font-black text-lg transition-all flex items-center justify-center gap-2" id="complete-btn-${cardIndex}">
+              Mark Complete
+            </button>
+          </div>
+        `;
+      }
+      
+      if (type === 'conditioning') {
+        const ex = exercises[0];
+        return `
+          <div class="bg-gradient-to-br from-red-900/20 to-orange-900/20 border border-red-800/50 rounded-2xl p-6">
+            <div class="flex items-center gap-2 mb-4">
+              <div class="w-2 h-2 bg-red-400 rounded-full"></div>
+              <h2 class="text-lg font-black text-white uppercase tracking-wide">Conditioning</h2>
+              <span class="ml-auto text-xs text-red-400 bg-red-500/20 px-2 py-1 rounded">FINISHER</span>
+            </div>
+            <div class="bg-zinc-950/50 rounded-xl p-4 mb-4">
+              <h4 class="text-white font-bold mb-3">${ex.name}</h4>
+              <div class="flex items-center justify-between mb-3">
+                <span class="text-orange-400 font-bold">${ex.working_sets} × ${ex.working_reps}</span>
+                <span class="text-red-400 text-sm font-semibold">${ex.working_intensity}</span>
+              </div>
+              <input type="text" placeholder="Notes" class="w-full bg-zinc-900 border border-zinc-700 rounded-lg px-3 py-2 text-white text-sm mb-2">
+              ${ex.rest ? `<p class="text-xs text-zinc-600">Rest: ${ex.rest}</p>` : ''}
+            </div>
+            <button onclick="markCompleteAndNext(${cardIndex})" class="w-full bg-transparent border-2 border-green-500 hover:bg-green-500/10 text-white px-6 py-4 rounded-xl font-black text-lg transition-all flex items-center justify-center gap-2" id="complete-btn-${cardIndex}">
+              Mark Complete
+            </button>
+          </div>
+        `;
+      }
+      
+      return '';
+    }
+    
+    // Workout Card Functions
     function updateCardPositions() {
       const cards = document.querySelectorAll('.workout-card');
       cards.forEach((card, index) => {
         const cardNum = parseInt(card.dataset.card);
-        card.classList.remove('active', 'prev', 'next', 'hidden');
+        card.classList.remove('active', 'prev', 'next');
         
         if (cardNum === currentCard) {
           card.classList.add('active');
@@ -590,7 +586,6 @@
       document.getElementById('prevBtn').disabled = currentCard === 0;
       document.getElementById('nextBtn').textContent = currentCard === totalCards - 1 ? 'Finish Workout' : 'Next →';
       
-      // Update progress
       updateProgress();
     }
     
@@ -599,8 +594,8 @@
         currentCard++;
         updateCardPositions();
       } else {
-        // Finish workout
         alert('Workout Complete! 🎉');
+        showWeekScreen();
       }
     }
     
@@ -615,31 +610,23 @@
       const completeBtn = document.getElementById(`complete-btn-${cardNum}`);
       
       if (completedCards.has(cardNum)) {
-        // Unmark
         completedCards.delete(cardNum);
-        completeBtn.innerHTML = `
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <polyline points="20 6 9 17 4 12" stroke-width="3"/>
-          </svg>
-          Mark Complete
-        `;
-        completeBtn.classList.remove('bg-zinc-700', 'from-zinc-700', 'to-zinc-600');
-        completeBtn.classList.add('bg-gradient-to-r', 'from-green-600', 'to-green-500');
+        completeBtn.innerHTML = 'Mark Complete';
+        completeBtn.classList.remove('bg-green-500', 'border-green-500');
+        completeBtn.classList.add('bg-transparent', 'border-2', 'border-green-500');
         document.querySelector(`.dot[data-index="${cardNum}"]`).classList.remove('completed');
       } else {
-        // Mark complete
         completedCards.add(cardNum);
         completeBtn.innerHTML = `
           <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
             <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
           </svg>
-          Completed ✓
+          Completed
         `;
-        completeBtn.classList.remove('from-green-600', 'to-green-500');
-        completeBtn.classList.add('bg-zinc-700', 'from-zinc-700', 'to-zinc-600');
+        completeBtn.classList.remove('bg-transparent', 'border-2');
+        completeBtn.classList.add('bg-green-500', 'border-green-500');
         document.querySelector(`.dot[data-index="${cardNum}"]`).classList.add('completed');
         
-        // Auto-advance to next card after 0.5 seconds
         setTimeout(() => {
           if (currentCard < totalCards - 1) {
             nextCard();
@@ -654,12 +641,6 @@
       const progress = (completedCards.size / totalCards) * 100;
       document.getElementById('progressBar').style.width = progress + '%';
       document.getElementById('progressText').textContent = `${completedCards.size}/${totalCards}`;
-    }
-    
-    function goBack() {
-      if (confirm('Exit workout? Progress will be lost.')) {
-        window.history.back();
-      }
     }
     
     // Swipe detection
@@ -678,17 +659,12 @@
     function handleSwipe() {
       const swipeThreshold = 50;
       if (touchStartX - touchEndX > swipeThreshold) {
-        // Swipe left - next card
         nextCard();
       }
       if (touchEndX - touchStartX > swipeThreshold) {
-        // Swipe right - previous card
         prevCard();
       }
     }
-    
-    // Initialize
-    updateCardPositions();
   </script>
 
 </body>
