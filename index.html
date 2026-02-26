@@ -520,7 +520,7 @@ const WARMUPS = {
       { name: "Foam Roll", detail: "Quads, IT band, thoracic spine — <em>2 min</em>. Can skip if short on time; yoga covers this adequately." },
       { name: "Hip Circles + Leg Swings", detail: "<em>10 reps each direction</em> per leg. Opens the hips before loading. Non-negotiable on squat day." },
       { name: "Bodyweight Squat", detail: "<em>2 × 10 reps</em>. Slow and controlled. Feel the pattern before adding load." },
-      { name: "Squat Ramp Sets", detail: "Bar × 10 → <em>50% TM × 5</em> → <em>70% TM × 3</em> → <em>85% TM × 1</em> → work set. Calculated weights show under the main lift." },
+      { name: "Squat Ramp Sets", detail: "Work up to your first work set with these warm-up ramps:" },
     ]
   },
   B: {
@@ -529,7 +529,7 @@ const WARMUPS = {
       { name: "Foam Roll — Thoracic Spine", detail: "<em>60–90 sec</em>. T-spine mobility directly affects how your shoulder moves on bench. 10 extensions over the roller." },
       { name: "Band Pull-Aparts", detail: "<em>2 × 20 reps</em>. Arms straight out front, pull band apart to chest. Squeezes rear delts and retractors. Non-negotiable." },
       { name: "Face Pulls (warm-up dose)", detail: "<em>2 × 15 reps</em> light. External rotation prep. Keeps the rotator cuff healthy as bench weight increases." },
-      { name: "Bench Ramp Sets", detail: "Bar × 10 → <em>50% TM × 5</em> → <em>70% TM × 3</em> → <em>85% TM × 1</em> → work set. Calculated weights show under the main lift." },
+      { name: "Bench Ramp Sets", detail: "Work up to your first work set with these warm-up ramps:" },
     ]
   },
   C: {
@@ -538,8 +538,8 @@ const WARMUPS = {
       { name: "Foam Roll — Hamstrings + Glutes", detail: "<em>90 sec</em>. Sit on the roller, cross one ankle over the knee, roll slowly. Both sides." },
       { name: "Hip Hinge Practice", detail: "<em>2 × 10 reps</em> bodyweight. Stand with feet hip-width, push hips back to wall behind you. Feel the hamstring load — that's the deadlift pattern." },
       { name: "Band Pull-Aparts", detail: "<em>1 × 20 reps</em>. Even on deadlift day — shoulders need priming for overhead press that follows." },
-      { name: "Deadlift Ramp Sets", detail: "Bar × 10 → <em>50% TM × 5</em> → <em>70% TM × 3</em> → <em>85% TM × 1</em> → work set." },
-      { name: "OHP Ramp Sets", detail: "Bar × 10 → <em>50% TM × 5</em> → <em>70% TM × 3</em> → work set. Do these after deadlift main sets." },
+      { name: "Deadlift Ramp Sets", detail: "Work up to your first work set with these warm-up ramps:" },
+      { name: "OHP Ramp Sets", detail: "Do these after deadlift main sets. Your warm-up ramps:" },
     ]
   }
 };
@@ -583,6 +583,7 @@ function saveState(s) { localStorage.setItem('ted_strength', JSON.stringify(s));
 let STATE = loadState();
 let currentDay = STATE.currentDay || 'A';
 let currentSets = {}; // { exId: { set0: {w, r, done}, ... } }
+let currentNotes = {}; // { exId: noteText }
 
 // ── UTILS ─────────────────────────────────────────────────────────────────
 function round5(n) { return Math.round(n / 5) * 5; }
@@ -638,19 +639,62 @@ function calcWorkWeight(lift, setIndex) {
   return round5(tm * pcts[setIndex]);
 }
 
+function buildRampTable(lift) {
+  const tm = getEffectiveTM(lift);
+  const rows = [
+    { label: 'Bar × 10', weight: 'Bar (45 lbs)', sub: 'Groove the pattern' },
+    { label: '50% × 5',  weight: round5(tm * 0.50) + ' lbs', sub: 'Light load' },
+    { label: '70% × 3',  weight: round5(tm * 0.70) + ' lbs', sub: 'Feeling heavier' },
+    { label: '85% × 1',  weight: round5(tm * 0.85) + ' lbs', sub: 'Final primer' },
+    { label: 'Work sets ↓', weight: '—', sub: 'Main lift below', isWork: true },
+  ];
+  return `
+    <div style="margin-top:10px;background:var(--bg);border-radius:8px;overflow:hidden;border:1px solid var(--border)">
+      ${rows.map(r => `
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 12px;border-bottom:1px solid var(--border);${r.isWork?'opacity:0.5':''}">
+          <div>
+            <div style="font-family:'DM Mono',monospace;font-size:12px;color:var(--text)">${r.label}</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:1px">${r.sub}</div>
+          </div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--accent2)">${r.weight}</div>
+        </div>`).join('')}
+    </div>`;
+}
+
 function renderWarmupCard(day, container) {
   const wu = WARMUPS[day];
-  const stepHTML = wu.steps.map((s, i) => `
+
+  // Map which lifts get ramp tables on each day
+  const rampLifts = { A: ['squat'], B: ['bench'], C: ['deadlift', 'ohp'] };
+  const liftsForDay = rampLifts[day] || [];
+  const liftNames = { squat: 'Back Squat', bench: 'Bench Press', deadlift: 'Deadlift', ohp: 'Overhead Press' };
+
+  const stepHTML = wu.steps.map((s, i) => {
+    // Inject ramp table if this step is a ramp step for a specific lift
+    let rampHTML = '';
+    liftsForDay.forEach(lift => {
+      if (s.name.toLowerCase().includes(liftNames[lift].toLowerCase().split(' ')[0].toLowerCase()) ||
+          (lift === 'ohp' && s.name.toLowerCase().includes('ohp')) ||
+          (lift === 'squat' && s.name.toLowerCase().includes('squat') && s.name.toLowerCase().includes('ramp')) ||
+          (lift === 'bench' && s.name.toLowerCase().includes('bench') && s.name.toLowerCase().includes('ramp')) ||
+          (lift === 'deadlift' && s.name.toLowerCase().includes('deadlift') && s.name.toLowerCase().includes('ramp')) ||
+          (lift === 'ohp' && s.name.toLowerCase().includes('ohp') && s.name.toLowerCase().includes('ramp'))) {
+        rampHTML += `<div style="margin-top:6px;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)">${liftNames[lift]} Ramps</div>` + buildRampTable(lift);
+      }
+    });
+    return `
     <div class="warmup-step">
       <div class="warmup-step-num">${i+1}</div>
       <div class="warmup-step-content">
         <div class="warmup-step-name">${s.name}</div>
         <div class="warmup-step-detail">${s.detail}</div>
+        ${rampHTML}
       </div>
-      <button class="warmup-step-done-btn" onclick="this.classList.toggle('done')">
+      <button class="warmup-step-done-btn" onclick="this.classList.toggle('done')" style="align-self:flex-start;margin-top:2px">
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20,6 9,17 4,12"/></svg>
       </button>
-    </div>`).join('');
+    </div>`;
+  }).join('');
 
   const card = document.createElement('div');
   card.className = 'warmup-card';
@@ -692,17 +736,7 @@ function renderExercises() {
 
     if (ex.isMain) {
       const pcts = WEEK_PCTS[week] || WEEK_PCTS[1];
-      // Ramp guide
-      const liftTM = STATE.tm[ex.lift] || 100;
-      const rampWeights = [
-        { pct: 'Bar', w: 'Bar' },
-        { pct: '50%', w: round5(liftTM * 0.50) + ' lbs' },
-        { pct: '70%', w: round5(liftTM * 0.70) + ' lbs' },
-        { pct: '85%', w: round5(liftTM * 0.85) + ' lbs' },
-      ];
-      const rampHTML = rampWeights.map(r =>
-        `<div class="ramp-row"><span class="ramp-pct">${r.pct} warm-up</span><span class="ramp-weight">${r.w}</span></div>`
-      ).join('');
+      const liftTM = getEffectiveTM(ex.lift);
 
       for (let i = 0; i < 3; i++) {
         const w = round5(liftTM * pcts[i]);
@@ -720,13 +754,8 @@ function renderExercises() {
             </button>
           </div>`;
       }
-      setsHTML += `
-        <div class="ramp-guide">
-          <div class="ramp-title">Warm-up ramps</div>
-          ${rampHTML}
-        </div>`;
     } else if (ex.pct) {
-      const w = round5((STATE.tm[ex.lift] || 100) * ex.pct);
+      const w = round5(getEffectiveTM(ex.lift) * ex.pct);
       for (let i = 0; i < numSets; i++) {
         const key = ex.id + '_set' + i;
         const saved = (currentSets[key] || {});
@@ -741,13 +770,15 @@ function renderExercises() {
           </div>`;
       }
     } else {
+      const sugW = getSuggestedWeight(ex);
+      const wLabel = sugW ? sugW + ' lbs' : 'weight';
       for (let i = 0; i < numSets; i++) {
         const key = ex.id + '_set' + i;
         const saved = (currentSets[key] || {});
         setsHTML += `
           <div class="set-row">
             <div class="set-label">Set ${i+1}</div>
-            <input class="set-input" type="number" inputmode="numeric" placeholder="weight / reps" value="${saved.w||''}" id="w_${key}" style="max-width:110px">
+            <input class="set-input" type="number" inputmode="numeric" placeholder="${wLabel}" value="${saved.w||''}" id="w_${key}" style="max-width:110px">
             <input class="set-input" type="number" inputmode="numeric" placeholder="${ex.repsScheme}" value="${saved.r||''}" id="r_${key}" style="max-width:90px">
             <button class="set-complete-btn ${saved.done?'done':''}" onclick="toggleSet('${key}',this)" id="btn_${key}">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20,6 9,17 4,12"/></svg>
@@ -759,6 +790,8 @@ function renderExercises() {
     const tagColor = currentDay === 'A' ? '#1a3a5c' : currentDay === 'B' ? '#3a1a1a' : '#1a3a2a';
     const tagText = currentDay === 'A' ? '#5b9bd5' : currentDay === 'B' ? 'var(--accent)' : 'var(--green)';
 
+    const lastNote = getLastNote(ex.id);
+    const lastNoteHTML = lastNote ? `<div style="background:var(--surface2);border-left:3px solid var(--muted);border-radius:0 6px 6px 0;padding:8px 10px;margin-bottom:10px;font-size:12px;color:var(--muted);line-height:1.5"><span style="color:var(--accent2);font-size:10px;text-transform:uppercase;letter-spacing:.08em;display:block;margin-bottom:3px">Last session note</span>${lastNote}</div>` : '';
     card.innerHTML = `
       <div class="ex-header" onclick="toggleEx(this)">
         <div>
@@ -768,8 +801,10 @@ function renderExercises() {
         <div class="ex-badge" style="background:${tagColor};color:${tagText}">${ex.tag}</div>
       </div>
       <div class="ex-body">
+        ${lastNoteHTML}
         ${setsHTML}
         <div class="coach-tip">💡 ${ex.tip}</div>
+        <textarea id="note_${ex.id}" placeholder="Notes for this exercise..." style="width:100%;margin-top:12px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;resize:none;min-height:60px;line-height:1.5" oninput="this.style.height='auto';this.style.height=this.scrollHeight+'px'">${(currentNotes[ex.id]||'')}</textarea>
       </div>`;
     container.appendChild(card);
   });
@@ -780,11 +815,72 @@ function toggleEx(header) {
   body.classList.toggle('open');
 }
 
+// ── SMART HELPERS ────────────────────────────────────────────────────────
+
+function getBest1RM(lift) {
+  let best = Math.round((STATE.tm[lift] || 100) / 0.9);
+  STATE.sessions.forEach(s => {
+    if (s.orm && s.orm[lift] && s.orm[lift] > best) best = s.orm[lift];
+  });
+  return best;
+}
+
+function getEffectiveTM(lift) {
+  const fromBest = round5(getBest1RM(lift) * 0.9);
+  return Math.max(STATE.tm[lift] || 100, fromBest);
+}
+
+function getLastWeight(exId) {
+  for (let i = STATE.sessions.length - 1; i >= 0; i--) {
+    const s = STATE.sessions[i];
+    const key = exId + '_set0';
+    if (s.sets && s.sets[key] && s.sets[key].w) return parseFloat(s.sets[key].w);
+  }
+  return null;
+}
+
+function getLastNote(exId) {
+  for (let i = STATE.sessions.length - 1; i >= 0; i--) {
+    const s = STATE.sessions[i];
+    if (s.notes && s.notes[exId]) return s.notes[exId];
+  }
+  return null;
+}
+
+const SEED_WEIGHTS = {
+  rdl: 95, leg_press: 135, leg_curl: 50,
+  barbell_row: 95, incline_db: 40, lat_pulldown: 70, tricep_face: 30,
+  trap_squat: 50, chinup: 0, db_shoulder: 30, farmer_carry: 50
+};
+
+function getSuggestedWeight(ex) {
+  const last = getLastWeight(ex.id);
+  if (last) return last;
+  if (SEED_WEIGHTS[ex.id] !== undefined && SEED_WEIGHTS[ex.id] > 0) return SEED_WEIGHTS[ex.id];
+  return null;
+}
+
 function toggleSet(key, btn) {
-  const w = document.getElementById('w_' + key)?.value;
-  const r = document.getElementById('r_' + key)?.value;
-  currentSets[key] = { w, r, done: !btn.classList.contains('done') };
+  const wEl = document.getElementById('w_' + key);
+  const rEl = document.getElementById('r_' + key);
+  const rawW = wEl?.value || (wEl?.placeholder || '').replace(' lbs','');
+  const rawR = rEl?.value || (rEl?.placeholder || '').replace(' reps','').replace(' AMRAP','');
+  const wasDone = btn.classList.contains('done');
+  currentSets[key] = { w: rawW, r: rawR, done: !wasDone };
   btn.classList.toggle('done');
+
+  if (!wasDone && rawW) {
+    const setIdx = parseInt(key.slice(-1));
+    const baseKey = key.slice(0, -1);
+    const nextKey = baseKey + (setIdx + 1);
+    const nextWEl = document.getElementById('w_' + nextKey);
+    if (nextWEl && !nextWEl.value) {
+      const nextW = round5(parseFloat(rawW) + 5);
+      nextWEl.placeholder = nextW + ' lbs';
+      nextWEl.style.borderColor = 'var(--accent2)';
+      setTimeout(() => { nextWEl.style.borderColor = ''; }, 1400);
+    }
+  }
 }
 
 function finishSession() {
@@ -813,15 +909,24 @@ function finishSession() {
     }
   });
 
+  // Collect notes
+  const notes = {};
+  PROGRAM[currentDay].exercises.forEach(ex => {
+    const el = document.getElementById('note_' + ex.id);
+    if (el && el.value.trim()) notes[ex.id] = el.value.trim();
+  });
+
   STATE.sessions.push({
     date: new Date().toISOString(),
     day: currentDay,
     week: STATE.week,
     sets,
-    orm
+    orm,
+    notes
   });
 
   currentSets = {};
+  currentNotes = {};
   saveState(STATE);
   showToast('Session logged! 💪');
   renderExercises();
